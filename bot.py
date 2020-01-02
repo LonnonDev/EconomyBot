@@ -13,13 +13,13 @@ os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 bottype = len(sys.argv) - 1
 print(bottype)
 
-if bottype == 1:
-	bot = commands.Bot(command_prefix='gb', case_insensitive=True)
-elif bottype == 0:
-	bot = commands.Bot(command_prefix='bb', case_insensitive=True)
-
 conn = sqlite3.connect("users.db")
 c = conn.cursor()
+
+c.execute("""CREATE TABLE IF NOT EXISTS servers (
+			id blob,
+			prefix real
+			)""")
 
 c.execute("""CREATE TABLE IF NOT EXISTS people (
 			name blob,
@@ -32,8 +32,21 @@ c.execute("""CREATE TABLE IF NOT EXISTS items (
 		fishing interger
 		)""")
 
+c.execute("""CREATE TABLE IF NOT EXISTS inventory (
+	name blob,
+	hairdryer blob
+	)""")
+
+
 c.execute("UPDATE items SET fishing=0")
 conn.commit()
+
+if bottype == 1:
+	bot = commands.Bot(command_prefix='gb', case_insensitive=True)
+elif bottype == 0:
+	bot = commands.Bot(command_prefix='bb', case_insensitive=True)
+
+
 class general(commands.Cog, name='General Commands'):
 	def __init__(self, bot):
 		self.bot = bot
@@ -54,6 +67,9 @@ class general(commands.Cog, name='General Commands'):
 			c.execute("INSERT INTO items (name, fish, fishing) VALUES (?, 0, 0)", (person,))
 			conn.commit()
 			await ctx.send(fetch)
+			c.execute("INSERT INTO inventory (name, hairdryer) VALUES (?, 0)", (person,))
+			conn.commit()
+
 		else:
 			await ctx.send("You're already registered")
 			await ctx.send("Do `gbget` to get your coin value!")
@@ -110,7 +126,7 @@ class general(commands.Cog, name='General Commands'):
 	@bal.command()
 	async def coin(self, ctx):
 		person = str(ctx.author.id)
-		c.execute("SELECT * from items where name=?", (person,))
+		c.execute("SELECT * from people where name=?", (person,))
 		conn.commit()
 		bal = c.fetchone()
 		print(bal)
@@ -119,7 +135,7 @@ class general(commands.Cog, name='General Commands'):
 	@bal.command()
 	async def fish(self, ctx):
 		person = str(ctx.author.id)
-		c.execute("SELECT * from people where name=?", (person,))
+		c.execute("SELECT * from items where name=?", (person,))
 		conn.commit()
 		bal = c.fetchone()
 		await ctx.send("You have {} <:fish:662055365449351168>".format(bal[1]))
@@ -132,38 +148,43 @@ class general(commands.Cog, name='General Commands'):
 
 	@shop.command()
 	async def buy(self, ctx, arg1, arg2):
-		person = ctx.author.id
-		if arg1 == 'Hairdryer':
-			return None
+		person = str(ctx.author.id)
+		c.execute("SELECT * from people where name=?", (person,))
+		conn.commit()
+		e = c.fetchone()
+		coins = e[1]
+		arg11 = arg1.lower()
+		if arg11 == 'hairdryer':
+			if float(coins) >= float(5)*float(arg2):
+				c.execute("SELECT * from inventory where name=?", (person,))
+				conn.commit()
+				d = c.fetchone()
+				c.execute("SELECT * from people where name=?", (person,))
+				conn.commit()
+				f = c.fetchone()
+				crn = f[1]
+				hrn = d[1]
+				await ctx.send("Bought " + str(arg2) + " hairdryers")
+				c.execute("UPDATE inventory set hairdryer=? where name=?", (hrn+arg2, person))
+				conn.commit()
+				c.execute("UPDATE people set coins=? where name=?", (crn-5, person))
+				conn.commit()
+			else:
+				await ctx.send("Sorry you don't have enough coins!")
+		else:
+			embed=discord.Embed(title="Shop", color=0x50fe54)
+			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
+			await self.bot.say(embed=embed)
+			
 
-	@buy.error
+	""" @buy.error
 	async def error(self, ctx, error):
 		if isinstance(error, commands.MissingRequiredArgument):
 			embed=discord.Embed(title="Shop", color=0x50fe54)
 			embed.add_field(name="Hairdryer", value="5 <:coin:662071327242321942>", inline=False)
-			await ctx.send(embed=embed)
+			await ctx.send(embed=embed)"""
 
 	@shop.command()
-	async def sell(self, ctx, arg1, arg2):
-		return None
-
-	@shop.command()
-	async def info(self, ctx, arg1):
-		if arg1 == 'Hairdryer':
-			embed=discord.Embed(title="Info", color=0x50fe54)
-			embed.add_field(name="Hairdryer", value="5 <:coin:662071327242321942>", inline=False)
-			embed.add_field(name="Description", value="When used can get you 3 - 25 fish!", inline=True)
-			await ctx.send(embed=embed)
-
-	@info.error
-	async def error(self, ctx, error):
-		if isinstance(error, commands.MissingRequiredArgument):
-			embed=discord.Embed(title="Shop", color=0x50fe54)
-			embed.add_field(name="Hairdryer", value="5 <:coin:662071327242321942>", inline=False)
-			await ctx.send(embed=embed)
-
-
-	@commands.command()
 	async def sell(self, ctx, arg1, arg2):
 		person = str(ctx.author.id)
 		argtwo = arg2
@@ -171,7 +192,7 @@ class general(commands.Cog, name='General Commands'):
 		conn.commit()
 		fishing = c.fetchone()
 		print(fishing)
-		if str(arg1) == 'fishing':
+		if str(arg1) == 'fish':
 			fishing1 = fishing[1]
 			fishing2 = fishing[2]
 			fishing = c.fetchone()
@@ -206,6 +227,30 @@ class general(commands.Cog, name='General Commands'):
 		if isinstance(error, commands.MissingRequiredArgument):
 			await ctx.send("Do `gbsell fishing <anount to sell>`")
 
+	@shop.command()
+	async def info(self, ctx, arg1):
+		if arg1 == 'all':
+			embed=discord.Embed(title="Shop")
+			embed.add_field(name="Hairdryer [Buy/Sell]", value="5 <:coin:662071327242321942>/2 <:coin:662071327242321942>", inline=False)
+			embed.add_field(name="Fish [Sell]", value="0.25 <:coin:662071327242321942>", inline=False)
+			await self.bot.say(embed=embed)
+		elif arg1 == 'Hairdryer':
+			embed=discord.Embed(title="Info", color=0x50fe54)
+			embed.add_field(name="Hairdryer", value="5 <:coin:662071327242321942>", inline=False)
+			embed.add_field(name="Description", value="When used can get you 3 - 25 fish!", inline=True)
+			await ctx.send(embed=embed)
+		else:
+			embed=discord.Embed(title="Info", color=0x50fe54)
+			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
+			await self.bot.say(embed=embed)
+
+	"""@info.error
+	async def error(self, ctx, error):
+		if isinstance(error, commands.MissingRequiredArgument):
+			embed=discord.Embed(title="Shop", color=0x50fe54)
+			embed.add_field(name="Hairdryer", value="5 <:coin:662071327242321942>", inline=False)
+			await ctx.send(embed=embed) """
+
 
 
 
@@ -217,4 +262,4 @@ if bottype == 1:
 elif bottype == 0:
 	print('epic1')
 	bot.run(config2)
-#py C:\Users\Lemon\Desktop\EconomyBot\bot.py
+#py C:\Users\Lemon\Desktop\EconomyBot\bot.py 1
