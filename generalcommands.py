@@ -8,9 +8,9 @@ from discord.ext import commands
 import asyncio
 from datetime import datetime
 import sqlite3
-from bot import c, conn
 
-
+conn = sqlite3.connect("users.db")
+c = conn.cursor()
 
 class general(commands.Cog, name='General Commands'):
 	def __init__(self, bot):
@@ -306,3 +306,13 @@ class general(commands.Cog, name='General Commands'):
 				await ctx.send("You caught a couple (2) of <:fish:662055365449351168> :heart:!")
 			else:
 				await ctx.send("You're already fishing!")
+
+
+
+
+
+
+
+def setup(bot):
+	print('GeneralCommands')
+	bot.add_cog(general(bot))

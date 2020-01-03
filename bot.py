@@ -13,7 +13,6 @@ from uuid import uuid4
 
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 bottype = len(sys.argv) - 1
-print(bottype)
 
 conn = sqlite3.connect("users.db")
 c = conn.cursor()
@@ -66,7 +65,6 @@ def setup():
 		bot =  commands.AutoShardedBot(command_prefix='gb', case_insensitive=True, loop=None)
 	elif bottype == 0:
 		bot = commands.AutoShardedBot(command_prefix='bb', case_insensitive=True, loop=None, shard_id=shardids, shard_count=shardcount)
-	bot.add_cog(generalcommands.general(bot))
 	if bottype == 1:
 		print('epic0')
 		bot.run(config)
