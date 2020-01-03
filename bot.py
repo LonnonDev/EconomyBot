@@ -30,12 +30,18 @@ c.execute("""CREATE TABLE IF NOT EXISTS people (
 c.execute("""CREATE TABLE IF NOT EXISTS items (
 		name blob,
 		fish real,
-		fishing interger
+		fishing real
 		)""")
 
 c.execute("""CREATE TABLE IF NOT EXISTS inventory (
 		name blob,
 		hairdryer blob
+		)""")
+
+c.execute("""CREATE TABLE IF NOT EXISTS levels (
+		name blob,
+		level int,
+		exp real
 		)""")
 
 
@@ -53,24 +59,35 @@ fishingrodtype = 'luv'
 c.execute("UPDATE items SET fishingrods=? WHERE name=?", (fishingrodtype, luvsid))
 conn.commit()
 #====================#
-# Shards
+# Options
 shardids = 1
 shardcount = 1
+initial_extensions = ['cogs.generalcommands']
 #====================#
 
 #====================#
-import generalcommands
-def setup():
-	if bottype == 1:
-		bot =  commands.AutoShardedBot(command_prefix='gb', case_insensitive=True, loop=None)
-	elif bottype == 0:
-		bot = commands.AutoShardedBot(command_prefix='bb', case_insensitive=True, loop=None, shard_id=shardids, shard_count=shardcount)
-	if bottype == 1:
-		print('epic0')
-		bot.run(config)
-	elif bottype == 0:
-		print('epic1')
-		bot.run(config2)
-setup()
+bot = commands.AutoShardedBot(command_prefix='bb', case_insensitive=True, loop=None, shard_id=shardids, shard_count=shardcount)
+for extension in initial_extensions:
+	bot.load_extension(extension)
+print('Main Loaded, with {} shard(s)'.format(shardcount))
 #====================#
 #py C:\Users\Lemon\Desktop\EconomyBot\bot.py 1
+
+@bot.command()
+@commands.is_owner()
+async def reloadextension(ctx):
+	await ctx.send("Reloaded Extensions")
+	bot.reload_extension(extension)
+
+
+
+
+
+
+
+
+
+
+
+
+bot.run(config2)
