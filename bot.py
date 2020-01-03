@@ -77,7 +77,8 @@ print('Main Loaded, with {} shard(s)'.format(shardcount))
 @commands.is_owner()
 async def reloadextension(ctx):
 	await ctx.send("Reloaded Extensions")
-	bot.reload_extension(extension)
+	for extension in initial_extensions:
+		bot.reload_extension(extension)
 
 
 

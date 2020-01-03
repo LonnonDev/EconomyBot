@@ -1,1 +1,0 @@
-py C:\Users\Lemon\Desktop\EconomyBot\generalcommands.py
