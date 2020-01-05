@@ -8,17 +8,17 @@ and that is all!
 
 Commands:
 - Help
-  Shows all commands
+    - Shows all commands
 - Start
-  Start the Game!
+    - Start the Game!
 - Restart
-  Restart the Game :C
-- Shop (WIP)
-  WIP
+    - Restart the Game :C
+- Shop
+    - Buy and sell stuff
 - Bal
-  Check your fish ammount or Coin Ammount
+    - Check your fish ammount or Coin Ammount
 - Sell
-  Sell stuff
+    - Sell stuff
 
 
 
