@@ -5,14 +5,16 @@ import discord
 import os
 import sys
 from discord.ext import commands
-from configthree import *
+from config import *
 import asyncio
 from datetime import datetime
 import sqlite3
 from uuid import uuid4
+import psutil
 
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
-bottype = len(sys.argv) - 1
+bottype = list(sys.argv)
+print(bottype)
 
 conn = sqlite3.connect("users.db")
 c = conn.cursor()
@@ -63,32 +65,45 @@ conn.commit()
 shardids = 1
 shardcount = 1
 initial_extensions = ['cogs.generalcommands']
+commandprefix = ('f!', 'f! ', 'f1', 'f1 ', 'F1', 'F!')
 #====================#
 
 #====================#
-bot = commands.AutoShardedBot(command_prefix='bb', case_insensitive=True, loop=None, shard_id=shardids, shard_count=shardcount)
+bot = commands.AutoShardedBot(command_prefix=commandprefix, case_insensitive=True, loop=None, shard_id=shardids, shard_count=shardcount)
 for extension in initial_extensions:
 	bot.load_extension(extension)
 print('Main Loaded, with {} shard(s)'.format(shardcount))
 #====================#
 #py C:\Users\Lemon\Desktop\EconomyBot\bot.py 1
 
-@bot.command()
-@commands.is_owner()
-async def reloadextension(ctx):
-	await ctx.send("Reloaded Extensions")
-	for extension in initial_extensions:
-		bot.reload_extension(extension)
+class owner(commands.Cog, name="Owner Only"):
+	def __init__(self, bot):
+		self.bot = bot
+
+	@commands.command(aliases=['reload'])
+	@commands.is_owner()
+	async def reloadextension(self, ctx):
+		await ctx.send("Reloaded Extensions")
+		for extension in initial_extensions:
+			bot.reload_extension(extension)
+
+class MyHelpCommand(commands.MinimalHelpCommand):
+	def get_command_signature(self, command):
+		return '{0.clean_prefix}{1.qualified_name} {1.signature}'.format(self, command)
+
+class MyCog(commands.Cog):
+	def __init__(self, bot):
+		self._original_help_command = bot.help_command
+		bot.help_command = MyHelpCommand()
+		bot.help_command.cog = self
+
+	def cog_unload(self):
+		self.bot.help_command = self._original_help_command
 
 
 
-
-
-
-
-
-
-
-
-
-bot.run(config2)
+#===============================#
+bot.add_cog(MyCog(bot))
+bot.add_cog(owner(bot))
+bot.run(config)
+#===============================#

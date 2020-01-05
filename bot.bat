@@ -1,0 +1,1 @@
+py C:\Users\Lemon\Desktop\EconomyBot\bot.py
