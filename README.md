@@ -22,8 +22,8 @@ Commands:
 
 
 
-License
-MIT License
+
+[MIT License]
 
 Copyright (c) 2020 LonnonjamesD
 
