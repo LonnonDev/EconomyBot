@@ -24,25 +24,15 @@ class general(commands.Cog, name='General Commands'):
 #===========================================================================================================#
 
 
-	@commands.command()
+	@commands.command(name="start")
 	async def start(self, ctx):
+		"""Start the game!"""
 		person = str(ctx.author.id) # User ID
-		personhandler(person) # Person Handeler
 		c.execute("SELECT * from people WHERE name=?", (person,)) # Get the User's obj's from people table
 		conn.commit() # Commit the changes
 		fetch = c.fetchone()
 		if fetch == None:
-			c.execute("INSERT INTO people (name, coins) VALUES (?, 1)", (person,)) 
-			conn.commit()
-			await ctx.send("Your life begins with 1 coin!")
-			c.execute("SELECT * from people WHERE name=?", (person,))
-			conn.commit()
-			fetch = c.fetchone()
-			c.execute("INSERT INTO items (name, fish, fishing) VALUES (?, 0, 0)", (person,))
-			conn.commit()
-			await ctx.send(fetch)
-			c.execute("INSERT INTO inventory (name, hairdryer) VALUES (?, 0)", (person,))
-			conn.commit()
+			personhandler(person) # Person Handeler
 		else:
 			await ctx.send("You're already registered")
 			await ctx.send("Do `f!bal coin` to get your coin value!")
@@ -122,7 +112,7 @@ class general(commands.Cog, name='General Commands'):
 				fishing = c.fetchone()
 				print(fishing)
 				await ctx.send("You caught 1 <:fish:662055365449351168>!")
-				getexp(person, randexp)
+				getexp(person)
 			else:
 				await ctx.send("You're already fishing!")
 		elif fishing[3] == 'god':
@@ -166,7 +156,7 @@ class general(commands.Cog, name='General Commands'):
 				fishing = c.fetchone()
 				print(fishing)
 				await ctx.send("You caught a couple (2) of <:fish:662055365449351168> :heart:!")
-				getexp(person, randexp)
+				getexp(person)
 			else:
 				await ctx.send("You're already fishing!")
 #:white_large_square: :green_square:
@@ -369,7 +359,7 @@ class general(commands.Cog, name='General Commands'):
 	@sell.error
 	async def error(self, ctx, error):
 		if isinstance(error, commands.MissingRequiredArgument):
-			await ctx.send("Do `f!sell fishing <amount to sell>`")
+			await ctx.send("Do `f!shop sell fish <amount to sell>`")
 
 	@shop.command()
 	async def info(self, ctx, arg):
@@ -489,7 +479,8 @@ def personhandler(person):
 	c.execute("SELECT * from items WHERE name=?", (person,))
 	conn.commit()
 	if c.fetchone() == None:
-		c.execute("INSERT INTO items (name, fish, fishing, fishingrods) VALUES (?, 0, 0, standard)", (person,))
+		rod = 'standard'
+		c.execute("INSERT INTO items (name, fish, fishing, fishingrods) VALUES (?, 0, 0, ?)", (person, rod))
 		conn.commit()
 	c.execute("SELECT * from inventory WHERE name=?", (person,))
 	conn.commit()
