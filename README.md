@@ -6,7 +6,7 @@ This bot is an open source economy discord bot, made in discord.py, by Lonnonjam
 if you have any questions on how to use the bot please join https://discord.gg/vr3NJ6g
 and that is all!
 
-Commands:
+## Commands
 - Help
     - Shows all commands
 - Start
@@ -21,6 +21,8 @@ Commands:
     - Sell stuff
 
 
+## More info
+[Security](https://github.com/LonnonjamesD/EconomyBot/blob/master/SECURITY.md)
 
 
 MIT License
