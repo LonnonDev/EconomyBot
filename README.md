@@ -23,6 +23,8 @@ and that is all!
 
 ## More info
 [Security](https://github.com/LonnonjamesD/EconomyBot/blob/master/SECURITY.md)
+[License](https://github.com/LonnonjamesD/EconomyBot/blob/master/LICENSE)
+[Contributing](https://github.com/LonnonjamesD/EconomyBot/blob/master/CONTRIBUTING.md)
 
 
 ## License
