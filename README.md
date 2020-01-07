@@ -25,6 +25,8 @@ and that is all!
 [Security](https://github.com/LonnonjamesD/EconomyBot/blob/master/SECURITY.md)
 
 
+## License
+
 MIT License
 
 Copyright (c) 2020 LonnonjamesD
