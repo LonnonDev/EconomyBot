@@ -5,13 +5,14 @@ import discord
 import os
 import sys
 from discord.ext import commands
-from config import *
 import asyncio
 from datetime import datetime
 import sqlite3
 from uuid import uuid4
 import psutil
 import itertools
+from tokengamer import *
+
 
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 bottype = list(sys.argv)
@@ -173,5 +174,5 @@ class MyCog(commands.Cog, name="Help"):
 #===============================#
 bot.add_cog(MyCog(bot))
 bot.add_cog(owner(bot))
-bot.run(token)
+bot.run(config)
 #===============================#
