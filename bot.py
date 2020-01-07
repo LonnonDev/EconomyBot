@@ -173,5 +173,5 @@ class MyCog(commands.Cog, name="Help"):
 #===============================#
 bot.add_cog(MyCog(bot))
 bot.add_cog(owner(bot))
-bot.run(config)
+bot.run(token)
 #===============================#
