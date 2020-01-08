@@ -12,6 +12,7 @@ import sqlite3
 import psutil
 
 
+
 conn = sqlite3.connect("users.db")
 c = conn.cursor()
 
@@ -86,6 +87,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@commands.command()
 	async def fish(self, ctx):
+		mention = ctx.author.mention
 		person = str(ctx.author.id)
 		randexp = random.randint(1,4)
 		personhandler(person)
@@ -102,7 +104,7 @@ class general(commands.Cog, name='General Commands'):
 				conn.commit()
 				fishing = c.fetchone()
 				print(fishing)
-				await ctx.send("You started fishing...")
+				await ctx.send(f"{mention} You started fishing...")
 				await asyncio.sleep(random.randint(10,120))
 				print(fishamm+1)
 				c.execute("UPDATE items SET name=?, fish=?, fishing=0 WHERE name=?", (person, fishamm+1, person))
@@ -111,8 +113,8 @@ class general(commands.Cog, name='General Commands'):
 				conn.commit()
 				fishing = c.fetchone()
 				print(fishing)
-				await ctx.send("You caught 1 <:fish:662055365449351168>!")
-				getexp(person)
+				await ctx.send(f"{mention} You caught 1 <:fish:662055365449351168>!")
+				getexp(person, randexp)
 			else:
 				await ctx.send("You're already fishing!")
 		elif fishing[3] == 'god':
@@ -124,17 +126,18 @@ class general(commands.Cog, name='General Commands'):
 				conn.commit()
 				fishing = c.fetchone()
 				print(fishing)
-				await ctx.send("You started fishing...")
+				await ctx.send(f"{mention} You started fishing...")
 				await asyncio.sleep(random.randint(1,1))
 				print(fishamm+1)
-				c.execute("UPDATE items SET name=?, fish=?, fishing=0 WHERE name=?", (person, fishamm+10, person))
+				fishget = random.randint(1,1000)
+				c.execute("UPDATE items SET name=?, fish=?, fishing=0 WHERE name=?", (person, fishamm+fishget, person))
 				conn.commit()
 				c.execute("SELECT * from items WHERE name=?", (person,))
 				conn.commit()
 				fishing = c.fetchone()
 				print(fishing)
-				await ctx.send("You caught 10 <:fish:662055365449351168>!")
-				getexp(person)
+				await ctx.send(f"{mention} You caught {fishget} <:fish:662055365449351168>!")
+				getexp(person, randexp)
 			else:
 				await ctx.send("You're already fishing!")
 		elif fishing[3] == 'luv':
@@ -146,17 +149,17 @@ class general(commands.Cog, name='General Commands'):
 				conn.commit()
 				fishing = c.fetchone()
 				print(fishing)
-				await ctx.send("You started fishing...")
+				await ctx.send(f"{mention} You started fishing...")
 				await asyncio.sleep(random.randint(1,30))
 				print(fishamm+1)
-				c.execute("UPDATE items SET name=?, fish=?, fishing=0 WHERE name=?", (person, fishamm+10, person))
+				c.execute("UPDATE items SET name=?, fish=?, fishing=0 WHERE name=?", (person, fishamm+2, person))
 				conn.commit()
 				c.execute("SELECT * from items WHERE name=?", (person,))
 				conn.commit()
 				fishing = c.fetchone()
 				print(fishing)
-				await ctx.send("You caught a couple (2) of <:fish:662055365449351168> :heart:!")
-				getexp(person)
+				await ctx.send(f"{mention} You caught a couple (2) of <:fish:662055365449351168> :heart:!")
+				getexp(person, randexp)
 			else:
 				await ctx.send("You're already fishing!")
 #:white_large_square: :green_square:
@@ -171,7 +174,7 @@ class general(commands.Cog, name='General Commands'):
 		print(levelingform)
 		print(level)
 		print(exp)
-		if math.isclose(float(exp), float(exp)*0.00, rel_tol=0.2):
+		if math.isclose(float(exp), float(levelingform)*0.00, rel_tol=0.2):
 			v1 = ":white_large_square:"
 			v2 = ":white_large_square:"
 			v3 = ":white_large_square:"
@@ -179,9 +182,10 @@ class general(commands.Cog, name='General Commands'):
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
-			embed.add_field(name=f"{levelingform}", value=f"{exp}", inline=False)
+			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
+			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
 			print(2)
-		elif math.isclose(float(exp), float(exp)*0.20, rel_tol=0.2):
+		elif math.isclose(float(exp), float(levelingform)*0.20, rel_tol=0.2):
 			v1 = ":green_square:"
 			v2 = ":white_large_square:"
 			v3 = ":white_large_square:"
@@ -189,9 +193,10 @@ class general(commands.Cog, name='General Commands'):
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
-			embed.add_field(name=f"{levelingform}", value=f"{exp}", inline=False)
+			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
+			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
 			print(2)
-		elif math.isclose(float(exp), float(exp)*0.40, rel_tol=0.2):
+		elif math.isclose(float(exp), float(levelingform)*0.40, rel_tol=0.2):
 			v1 = ":green_square:"
 			v2 = ":green_square:"
 			v3 = ":white_large_square:"
@@ -199,9 +204,10 @@ class general(commands.Cog, name='General Commands'):
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
-			embed.add_field(name=f"{levelingform}", value=f"{exp}", inline=False)
+			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
+			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
 			print(3)
-		elif math.isclose(float(exp), float(exp)*0.60, rel_tol=0.2):
+		elif math.isclose(float(exp), float(levelingform)*0.60, rel_tol=0.2):
 			v1 = ":green_square:"
 			v2 = ":green_square:"
 			v3 = ":green_square:"
@@ -209,9 +215,10 @@ class general(commands.Cog, name='General Commands'):
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
-			embed.add_field(name=f"{levelingform}", value=f"{exp}", inline=False)
+			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
+			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
 			print(4)
-		elif math.isclose(float(exp), float(exp)*0.80, rel_tol=0.2):
+		elif math.isclose(float(exp), float(levelingform)*0.80, rel_tol=0.2):
 			v1 = ":green_square:"
 			v2 = ":green_square:"
 			v3 = ":green_square:"
@@ -237,6 +244,7 @@ class general(commands.Cog, name='General Commands'):
 		embed.add_field(name="RAM Usage", value=f"{ram[2]}%", inline=True)
 		embed.add_field(name="Invite", value="[Click here to invite](https://discordapp.com/api/oauth2/authorize?client_id=627932116319076353&permissions=1812462657&scope=bot)", inline=True)
 		embed.add_field(name="Trello", value="[Click here to go to Trello](https://trello.com/b/rzd1Y7C6/fishing-bot-thing)", inline=True)
+		embed.add_field(name="Trello", value="[Click here to go to Github](https://github.com/LonnonjamesD/EconomyBot)", inline=True)
 		await ctx.send(embed=embed)
 
 	@commands.command()
@@ -257,6 +265,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@shop.command()
 	async def buy(self, ctx, arg1, arg2):
+		mention = ctx.author.mentio
 		person = str(ctx.author.id)
 		personhandler(person)
 		c.execute("SELECT * from people where name=?", (person,))
@@ -319,6 +328,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@shop.command()
 	async def sell(self, ctx, arg1, arg2):
+		mention = ctx.author.mention
 		person = str(ctx.author.id)
 		personhandler(person)
 		argtwo = arg2
@@ -350,11 +360,11 @@ class general(commands.Cog, name='General Commands'):
 				c.execute("UPDATE people SET name=?, coins=? WHERE name=?", (person, float(moneyearned), person))
 				conn.commit()
 				print(c.fetchone())
-				await ctx.send("Sold " + str(argtwo) + " <:fish:662055365449351168>")
+				await ctx.send(f"{mention} Sold " + str(argtwo) + " <:fish:662055365449351168>")
 			elif float(fishing2) < float(arg2):
-				await ctx.send("You don't have that many fish!")
+				await ctx.send(f"{mention} You don't have that many fish!")
 		else:
-			await ctx.send("You can't sell that!")
+			await ctx.send(f"{mention} You can't sell that!")
 
 	@sell.error
 	async def error(self, ctx, error):
@@ -443,7 +453,7 @@ class general(commands.Cog, name='General Commands'):
 		conn.commit()
 		fetch0 = c.fetchall()
 		fetchall = fetch0[0]
-		toc = ('name', 'hairdryer')
+		toc = ('hairdryer')
 		print(fetch0)
 		if arg in toc:
 			print(int(arg in toc))
@@ -494,7 +504,7 @@ def personhandler(person):
 		c.execute("INSERT INTO levels (name, level, exp) VALUES (?, 0, 0.0)", (person,))
 		conn.commit()
 
-def getexp(person):
+def getexp(person, randexp):
 	print('epic')
 	c.execute("SELECT * from levels WHERE name=?", (person,))
 	fetchlevel = c.fetchall()
@@ -525,6 +535,10 @@ def checklevel(person):
 			c.execute("UPDATE levels SET name=?, level=?, exp=? WHERE name=?", (person, int(fetchlevel1)+1, int(fetchlevel2)-int(levelingform), person))
 			conn.commit()
 
+def houseformat(person):
+	c.execute("SELECT * from house WHERE name=?", (person,))
+	fetchall = c.fetchall()
+	fetchall = fetchall[0]
 
 def setup(bot):
 	print('GeneralCommands')

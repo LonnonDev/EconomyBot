@@ -10,9 +10,8 @@ from datetime import datetime
 import sqlite3
 from uuid import uuid4
 import psutil
-import itertools
 from tokengamer import *
-
+import itertools
 
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 bottype = list(sys.argv)
@@ -46,6 +45,12 @@ c.execute("""CREATE TABLE IF NOT EXISTS levels (
 		name blob,
 		level int,
 		exp real
+		)""")
+
+c.execute("""CREATE TABLE IF NOT EXISTS house (
+		name blob,
+		housefloors int,
+		furniture blob
 		)""")
 
 
