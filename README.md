@@ -1,4 +1,4 @@
-[![License](https://github.com/LonnonjamesD/EconomyBot/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/LonnonjamesD/EconomyBot?style=plastic)(https://github.com/LonnonjamesD/EconomyBot/blob/master/LICENSE)
 
 # EconomyBot
 
