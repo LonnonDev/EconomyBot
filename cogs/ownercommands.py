@@ -139,6 +139,43 @@ class owner(commands.Cog, name="Mod Commands"):
 		await ctx.send(f'{version} | {splashes[splashran1]}')
 		await self.bot.change_presence(status=discord.Status.online, activity=game)
 
+	@commands.command()
+	@commands.check(mod)
+	async def code(self, ctx, *, code):
+		if code == 'inventory':
+			await ctx.send("""```py
+	@commands.group()
+	async def inventory(self, ctx):
+		if ctx.invoked_subcommand is None:
+			person = str(ctx.author.id)
+			personhandler(person)
+			c.execute("SELECT * from items WHERE name=?", (person,))
+			conn.commit()
+			fetch0 = c.fetchall()
+			c.execute("SELECT * from inventory where name=?", (person,))
+			conn.commit()
+			fetch1 = c.fetchall()
+			fetchall = fetch1[0]
+			check = 0
+			toc = ('name', 'hairdryer')
+			lentoc = len(toc) 
+			embed=discord.Embed(title="Inventory", color=0x50fe54)
+			while check != lentoc:
+				check += 1
+				if fetchall[check-1] == 0 or fetchall[check-1] == str(ctx.author.id):
+					#print(check)
+					pass
+				elif fetchall[check-1] != 0 or fetchall[check-1] != str(ctx.author.id):
+					#print(check)
+					itemname1 = toc[check-1].capitalize()
+					itemammount = fetchall[check-1]
+					if itemammount > 1:
+						embed.add_field(name=itemname1, value="You have {:,.0f} {}s".format(itemammount, itemname1), inline=False)
+					else:
+						embed.add_field(name=itemname1, value="You have {:,.0f} {}".format(itemammount, itemname1), inline=False)
+			await ctx.send(embed=embed)
+			await ctx.send(f"{ctx.author.mention}  Do `f!inventory info <item>` for more info")```""")
+
 
 def setup(bot):
 	print("OwnerCommands")
