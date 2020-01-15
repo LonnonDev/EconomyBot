@@ -1,6 +1,7 @@
 import time
 import json
 import random
+import math
 import discord
 import os
 import sys
@@ -10,8 +11,8 @@ from datetime import datetime
 import sqlite3
 from uuid import uuid4
 import psutil
-from tokengamer import *
 import itertools
+os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 
 conn = sqlite3.connect("users.db")
 c = conn.cursor()
@@ -38,10 +39,10 @@ class general(commands.Cog, name='General Commands'):
 		fetch = c.fetchone()
 		if fetch == None:
 			personhandler(person) # Person Handeler
-			await ctx.send("You just got registed!")
+			await ctx.send(f"{ctx.author.mention} You just got registed!")
 			log(ctx, f'started the game')
 		else:
-			await ctx.send("You're already registered")
+			await ctx.send(f"{ctx.author.mention} You're already registered")
 			await ctx.send("Do `f!help` for help!")
 
 	@commands.command()
@@ -55,12 +56,12 @@ class general(commands.Cog, name='General Commands'):
 			await ctx.send("Done!")
 			log(ctx, f'restared the game')
 		else:
-			await ctx.send("Do `f!restart yes` to restart")
+			await ctx.send(f"{ctx.author.mention} Do `f!restart yes` to restart")
 
 	@commands.group(aliases=['balance'])
 	async def bal(self, ctx):
 		if ctx.invoked_subcommand is None:
-			await ctx.send("That's not a bal, please pick between `coin` or `fish`!")
+			await ctx.send(f"{ctx.author.mention} That's not a bal, please pick between `coin` or `fish`!")
 
 	@bal.command()
 	async def coin(self, ctx):
@@ -69,7 +70,7 @@ class general(commands.Cog, name='General Commands'):
 		c.execute("SELECT * from people where name=?", (person,))
 		conn.commit()
 		bal = c.fetchone()
-		await ctx.send("You have {} <:coin:662071327242321942>".format(bal[1]))
+		await ctx.send(f"{ctx.author.mention} You have {bal[1]} <:coin:662071327242321942>")
 
 	@bal.command(name="fish")
 	async def fishingbal(self, ctx):
@@ -79,13 +80,13 @@ class general(commands.Cog, name='General Commands'):
 		conn.commit()
 		bal = c.fetchone()
 		lenbal = len(str(bal[1]))
-		await ctx.send("You have {:,.0f} <:fish:662055365449351168>".format(int(bal[1])))
+		await ctx.send("{} You have {:,.0f} <:fish:662055365449351168>".format(ctx.author.mention, int(bal[1])))
 
 	@commands.command()
 	async def update(self, ctx):
 		person = str(ctx.author.id)
 		personhandler(person)
-		await ctx.send("Updated user Data")
+		await ctx.send(f"{ctx.author.mention} Updated user Data")
 
 	@commands.command()
 	async def fish(self, ctx):
@@ -168,7 +169,7 @@ class general(commands.Cog, name='General Commands'):
 				fishing = c.fetchone()
 				log(ctx, f'caught 2 fish')
 			else:
-				await ctx.send("You're already fishing!")
+				await ctx.send(f"{ctx.author.mention} You're already fishing!")
 
 #:white_large_square: :green_square:
 	@commands.command()
@@ -258,7 +259,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@commands.command()
 	async def invite(self, ctx):
-		await ctx.send("Do `f!status` to see invite link")
+		await ctx.send(f"{ctx.author.mention} Do `f!status` to see invite link")
 
 
 #===========================================================================================================#
@@ -275,7 +276,7 @@ class general(commands.Cog, name='General Commands'):
 			embed.add_field(name="Fish `fish` [Sell]", value="0.25<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Iron rod `ironrod` [Buy]", value="25<:coin:662071327242321942>", inline=False)
 			await ctx.send(embed=embed)
-			await ctx.send("For more info do `[] = optional, <> = required` `f!shop <buy or sell or info> <item> [amount]`")
+			await ctx.send(f"{ctx.author.mention} For more info do `[] = optional, <> = required` `f!shop <buy or sell or info> <item> [amount]`")
 
 
 	@shop.command()
@@ -328,9 +329,9 @@ class general(commands.Cog, name='General Commands'):
 					fishing = c.fetchone()
 					log(ctx, f'bought {str(arg2)} {str(arg1)}(s)')
 				else:
-					await ctx.send("Sorry you don't have enough coins!")
+					await ctx.send(f"{ctx.author.mention} Sorry you don't have enough coins!")
 			else:
-				await ctx.send("You already have the iron rod!")
+				await ctx.send(f"{ctx.author.mention} You already have the iron rod!")
 		else:
 			embed=discord.Embed(title="Shop", color=0x50fe54)
 			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
@@ -434,7 +435,7 @@ class general(commands.Cog, name='General Commands'):
 					else:
 						embed.add_field(name=itemname1, value="You have {:,.0f} {}".format(itemammount, itemname1), inline=False)
 			await ctx.send(embed=embed)
-			await ctx.send("Do `f!inventory info <item>` for more info")
+			await ctx.send(f"{ctx.author.mention}  Do `f!inventory info <item>` for more info")
 
 	@inventory.command(name='info')
 	async def info1(self, ctx):
@@ -491,7 +492,7 @@ class general(commands.Cog, name='General Commands'):
 					randint = random.randint(3,25)
 					c.execute("UPDATE items SET name=?, fish=? WHERE name=?", (person, fishamm[1], person))
 					conn.commit()
-					await ctx.send(f"You got {randint} fish!")
+					await ctx.send(f"{ctx.author.mention} You got {randint} fish!")
 				else:
 					await ctx.send("HACKER?!!?!?!?!?!?")
 			else:
@@ -564,7 +565,7 @@ def houseformat(person):
 
 def log(ctx, logtext):
 	os.chdir('C:/Users/Lemon/Desktop/EconomyBot/logs')
-	log = open("log{}.txt".format(rannumber), "a")
+	log = open("log{}.log".format(rannumber), "a", encoding='utf-8')
 	os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 	now = datetime.now()
 	ct = now.strftime("%H:%M:%S")

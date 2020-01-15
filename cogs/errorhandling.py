@@ -11,8 +11,15 @@ from datetime import datetime
 import sqlite3
 from uuid import uuid4
 import psutil
-from tokengamer import *
 import itertools
+os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
+
+conn = sqlite3.connect("users.db")
+c = conn.cursor()
+
+c.execute("SELECT * from ran")
+fetchone = c.fetchone()
+rannumber = int(fetchone[0])+1
 
 
 class CommandErrorHandler(commands.Cog, name="ErrorHandler"):
@@ -26,10 +33,30 @@ class CommandErrorHandler(commands.Cog, name="ErrorHandler"):
 		elif isinstance(error, commands.BadArgument):
 			await ctx.send("Bad Argument")	
 		elif isinstance(error, commands.CommandNotFound):
-			await ctx.send(f"That is **NOT** a command.")
+			await ctx.send(f"That is **NOT** a command. (Command Not Found)")
+		elif isinstance(error, commands.MissingPermissions):
+			await ctx.send("Missing Permissions")
 
-		print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
-		traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)		
+
+		ctx.author = 'console'
+		erro = traceback.format_exception(type(error), error, error.__traceback__)
+		dw = ''
+		error = dw.join(erro)
+		log(ctx, '\n\nIgnoring exception in command {}:'.format(ctx.command))
+		log(ctx, error)
+
+def log(ctx, logtext : str):
+	os.chdir('C:/Users/Lemon/Desktop/EconomyBot/logs')
+	log = open("log{}.log".format(rannumber), "a", encoding='utf-8')
+	os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
+	now = datetime.now()
+	ct = now.strftime("%H:%M:%S")
+	if ctx.author == 'console':
+		person = ''
+	else:
+		person = str(ctx.author.id)
+	log.write(f"\n{ct} | {ctx.author} {person} {logtext}")
+	log.close()
 
 def setup(bot):
 	print("ErrorHandler")
