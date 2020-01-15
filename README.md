@@ -1,4 +1,5 @@
 [![License](https://img.shields.io/github/license/LonnonjamesD/EconomyBot?style=plastic)](https://github.com/LonnonjamesD/EconomyBot/blob/master/LICENSE)
+[![Donate](https://img.shields.io/badge/Donate-%24%24%24-brightgreen)](https://www.patreon.com/Lonnon)
 
 # EconomyBot
 
