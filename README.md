@@ -1,8 +1,9 @@
+[![License](https://img.shields.io/github/license/LonnonjamesD/EconomyBot?style=plastic)](https://github.com/LonnonjamesD/EconomyBot/blob/master/LICENSE)
+[![Donate](https://img.shields.io/badge/Donate-%24%24%24-brightgreen)](https://www.patreon.com/Lonnon)
+
 # EconomyBot
 
-Open source, have fun gamers :)
-
-This bot is an open source economy discord bot, made in discord.py, by LonnonjamesD
+This bot is an economy discord bot, made in discord.py, by LonnonjamesD
 if you have any questions on how to use the bot please join https://discord.gg/vr3NJ6g
 and that is all!
 
@@ -23,7 +24,6 @@ and that is all!
 
 ## More info
 - [Security](https://github.com/LonnonjamesD/EconomyBot/blob/master/SECURITY.md)
-- [License](https://github.com/LonnonjamesD/EconomyBot/blob/master/LICENSE)
 - [Contributing](https://github.com/LonnonjamesD/EconomyBot/blob/master/CONTRIBUTING.md)
 
 
