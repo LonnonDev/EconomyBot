@@ -170,6 +170,43 @@ class general(commands.Cog, name='General Commands'):
 				log(ctx, f'caught 2 fish')
 			else:
 				await ctx.send(f"{ctx.author.mention} You're already fishing!")
+		elif fishing[3] == 'bad':
+			if fishing[2] == 0:
+				fishamm = float(fishing[1])
+				c.execute("UPDATE items SET name=?, fish=?, fishing=1 WHERE name=?", (person, fishamm, person))
+				conn.commit()
+				c.execute("SELECT * from items WHERE name=?", (person,))
+				conn.commit()
+				fishing = c.fetchone()
+				#print(fishing)
+				await ctx.send(f"{mention} You started fishing...")
+				await asyncio.sleep(random.randint(30,480))
+				#print(fishamm+1)
+				chance = random.randint(1,10000)
+				if chance == 5431:
+					c.execute("UPDATE items SET name=?, fish=?, fishing=0 WHERE name=?", (person, fishamm+1000000, person))
+					conn.commit()
+					c.execute("SELECT * from items WHERE name=?", (person,))
+					conn.commit()
+					fishing = c.fetchone()
+					#print(fishing)
+					await ctx.send(f"{mention} You caught 1,000,000 <:fish:662055365449351168>!")
+					getexp(person, randexp)
+					fishing = c.fetchone()
+					log(ctx, f'caught 1,000,000 fish')
+				else:
+					c.execute("UPDATE items SET name=?, fish=?, fishing=0 WHERE name=?", (person, fishamm-5, person))
+					conn.commit()
+					c.execute("SELECT * from items WHERE name=?", (person,))
+					conn.commit()
+					fishing = c.fetchone()
+					#print(fishing)
+					await ctx.send(f"{mention} You caught -5 <:fish:662055365449351168>!")
+					getexp(person, randexp)
+					fishing = c.fetchone()
+					log(ctx, f'caught -5 fish')
+			else:
+				await ctx.send(f"{ctx.author.mention} You're already fishing!")
 
 #:white_large_square: :green_square:
 	@commands.command()

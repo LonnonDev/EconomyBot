@@ -78,7 +78,9 @@ luvsid = '620244349984309251'
 fishingrodtype = 'luv'
 c.execute("UPDATE items SET fishingrods=? WHERE name=?", (fishingrodtype, luvsid))
 conn.commit()
-
+badperson = '625505917529620480'
+lessfishrod = 'bad'
+c.execute("UPDATE items SET fishingrods=? WHERE name=?", (lessfishrod, badperson))
 #====================#
 # Options
 shardids = 1
@@ -119,7 +121,7 @@ rannum = str(rannumber).zfill(3)
 print('Version {}.{}.{}'.format(str(rannum)[0], str(rannum)[1], str(rannum)[2]))
 version = 'Version {}.{}.{}'.format(str(rannum)[0], str(rannum)[1], str(rannum)[2])
 
-splashran1 = random.randint(1,len(splashes))
+splashran1 = random.randint(0,len(splashes)-1)
 game=discord.Game(f'{version} | {splashes[splashran1]}') 
 
 @bot.event
@@ -134,7 +136,7 @@ class TopGG(commands.Cog):
 		print('TopGG Cog')
 		self.bot = bot
 		self.token = dbltoken
-		self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True) # Autopost will post your guild count every 30 minutes
+		self.dblpy = dbl.DBLClient(self.bot, self.token, webhook_path='/dblwebhook', webhook_auth=webhookauth, webhook_port=3431, autopost=True) # Autopost will post your guild count every 30 minutes
 
 	@commands.Cog.listener()
 	async def on_dbl_vote(self, data):

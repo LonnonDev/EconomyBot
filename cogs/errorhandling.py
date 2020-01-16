@@ -31,12 +31,11 @@ class CommandErrorHandler(commands.Cog, name="ErrorHandler"):
 		if isinstance(error, commands.MissingRequiredArgument):
 			await ctx.send("Missing Required Argument")
 		elif isinstance(error, commands.BadArgument):
-			await ctx.send("Bad Argument")	
-		elif isinstance(error, commands.CommandNotFound):
-			await ctx.send(f"That is **NOT** a command. (Command Not Found)")
+			await ctx.send("Bad Argument")
 		elif isinstance(error, commands.MissingPermissions):
 			await ctx.send("Missing Permissions")
-
+		elif isinstance(error, commands.CheckFailure):
+			await ctx.send("You don't have required permissions")
 
 		ctx.author = 'console'
 		erro = traceback.format_exception(type(error), error, error.__traceback__)

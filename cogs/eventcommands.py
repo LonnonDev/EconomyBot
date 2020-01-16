@@ -26,7 +26,7 @@ class event(commands.Cog, name='Event Commands'):
 		self.bot = bot
 
 	@commands.command()
-	async def splashtext(self, ctx, arg):
+	async def splashtext(self, ctx, *, text):
 		person = str(ctx.author.id)
 		c.execute("SELECT * from event WHERE name=?", (person,))
 		fetchone = c.fetchone()
