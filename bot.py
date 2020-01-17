@@ -88,7 +88,7 @@ shardcount = 1
 splashesfile = open('splash.es', 'r', encoding="utf8")
 #   list(str(splashesfile.read()).split("-"))
 splashes = list(str(splashesfile.read()).split("-"))
-initial_extensions = ['cogs.generalcommands', 'cogs.errorhandling', 'cogs.ownercommands', 'cogs.helpcommand', 'cogs.eventcommands']
+initial_extensions = ['cogs.generalcommands', 'cogs.errorhandling', 'cogs.ownercommands', 'cogs.helpcommand', 'cogs.eventcommands', 'cogs.funcommands']
 commandprefix = ('f! ', 'f1 ', 'F! ', 'F1 ', 'f!', 'f1', 'F1', 'F!')
 #====================#
 
@@ -109,7 +109,7 @@ c.execute("UPDATE ran SET ran=?", (rannumber,))
 conn.commit()
 
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot/logs')
-log = open("log{}.log".format(rannumber), "a+")
+log = open("log{}.log".format(rannumber), "a+", encoding='utf-8')
 f = log
 os.remove("log{}.log".format(rannumber-3))
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
@@ -129,24 +129,6 @@ async def on_ready():
 	await bot.change_presence(status=discord.Status.online, activity=game)
 
 
-class TopGG(commands.Cog):
-	"""Handles interactions with the top.gg API"""
 
-	def __init__(self, bot):
-		print('TopGG Cog')
-		self.bot = bot
-		self.token = dbltoken
-		self.dblpy = dbl.DBLClient(self.bot, self.token, webhook_path='/dblwebhook', webhook_auth=webhookauth, webhook_port=3431, autopost=True) # Autopost will post your guild count every 30 minutes
-
-	@commands.Cog.listener()
-	async def on_dbl_vote(self, data):
-		print(data)
-
-	@commands.Cog.listener()
-	async def on_dbl_test(self, data):
-		print(data)
-
-
-bot.add_cog(TopGG(bot))
 bot.run(config)
 #===============================#

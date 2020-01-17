@@ -27,6 +27,8 @@ class owner(commands.Cog, name="Mod Commands"):
 
 	async def mod(ctx):
 		return ctx.author.id == 600798393459146784 or ctx.author.id == 362255701323677713 or ctx.author.id == 620244349984309251
+	async def code(ctx):
+		return mod() or ctx.author.id == 370120271367110656
 
 	@commands.command()
 	@commands.check(mod)
@@ -118,7 +120,7 @@ class owner(commands.Cog, name="Mod Commands"):
 	@commands.command()
 	@commands.check(mod)
 	async def reload(self, ctx):
-		initial_extensions = ['cogs.generalcommands', 'cogs.errorhandling', 'cogs.ownercommands', 'cogs.helpcommand']
+		initial_extensions = ['cogs.generalcommands', 'cogs.errorhandling', 'cogs.ownercommands', 'cogs.helpcommand', 'cogs.eventcommands', 'cogs.funcommands']
 		print("\nReloaded Extensions\n")
 		for extension in initial_extensions:
 			self.bot.reload_extension(extension)
@@ -145,13 +147,18 @@ class owner(commands.Cog, name="Mod Commands"):
 		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 		read = open(f"{file}.py", "r").readlines()[int(start)-1:int(end)]
 		read = ' '.join(read)
-		await ctx.send(f'''```py
+		read = codeblock(read)
+		await ctx.send(f'''>>> ```py
  {read}
 ```''')
+		await ctx.send("[+] = ```")
+		await ctx.send("[-] = `")
 		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 
 
-
+def codeblock(text):
+	codeblockformat = text.replace('```', '[+]').replace('`', '[-]')
+	return codeblockformat
 
 def setup(bot):
 	print("OwnerCommands")

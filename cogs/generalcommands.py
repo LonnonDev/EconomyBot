@@ -33,12 +33,12 @@ class general(commands.Cog, name='General Commands'):
 
 	@commands.command(name="start")
 	async def start(self, ctx):
-		person = str(ctx.author.id) # User ID
-		c.execute("SELECT * from people WHERE name=?", (person,)) # Get the User's obj's from people table
-		conn.commit() # Commit the changes
+		person = str(ctx.author.id)
+		c.execute("SELECT * from people WHERE name=?", (person,))
+		conn.commit()
 		fetch = c.fetchone()
 		if fetch == None:
-			personhandler(person) # Person Handeler
+			personhandler(person)
 			await ctx.send(f"{ctx.author.mention} You just got registed!")
 			log(ctx, f'started the game')
 		else:
@@ -228,6 +228,7 @@ class general(commands.Cog, name='General Commands'):
 			v4 = ":white_large_square:"
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
+			
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
@@ -239,6 +240,7 @@ class general(commands.Cog, name='General Commands'):
 			v4 = ":white_large_square:"
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
+			
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
@@ -250,6 +252,7 @@ class general(commands.Cog, name='General Commands'):
 			v4 = ":white_large_square:"
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
+			
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
@@ -261,6 +264,7 @@ class general(commands.Cog, name='General Commands'):
 			v4 = ":white_large_square:"
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
+			
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
@@ -272,6 +276,7 @@ class general(commands.Cog, name='General Commands'):
 			v4 = ":green_square:"
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
+			
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
@@ -286,6 +291,7 @@ class general(commands.Cog, name='General Commands'):
 		cpu = psutil.cpu_percent()
 		ram = psutil.virtual_memory()
 		embed=discord.Embed(title="Status")
+		
 		embed.add_field(name="Ping", value=("%gms" % (float(ping))), inline=True)
 		embed.add_field(name="CPU Usage", value=f"{cpu}%", inline=True)
 		embed.add_field(name="RAM Usage", value=f"{ram[2]}%", inline=True)
@@ -298,6 +304,9 @@ class general(commands.Cog, name='General Commands'):
 	async def invite(self, ctx):
 		await ctx.send(f"{ctx.author.mention} Do `f!status` to see invite link")
 
+	@commands.command()
+	async def vote(self, ctx):
+		await ctx.send("https://top.gg/bot/627932116319076353/vote")
 
 #===========================================================================================================#
 
@@ -309,6 +318,7 @@ class general(commands.Cog, name='General Commands'):
 	async def shop(self, ctx):
 		if ctx.invoked_subcommand is None:
 			embed=discord.Embed(title="Shop")
+			
 			embed.add_field(name="Hairdryer `hairdryer` [Buy/Sell]", value="5<:coin:662071327242321942>/2<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Fish `fish` [Sell]", value="0.25<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Iron rod `ironrod` [Buy]", value="25<:coin:662071327242321942>", inline=False)
@@ -370,6 +380,7 @@ class general(commands.Cog, name='General Commands'):
 			else:
 				await ctx.send(f"{ctx.author.mention} You already have the iron rod!")
 		else:
+			
 			embed=discord.Embed(title="Shop", color=0x50fe54)
 			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
 			await ctx.send(embed=embed)
@@ -422,17 +433,20 @@ class general(commands.Cog, name='General Commands'):
 		arg1 = str(arg.lower())
 		if arg1 == 'all':
 			embed=discord.Embed(title="Shop")
+			
 			embed.add_field(name="Hairdryer `hairdryer` [Buy/Sell]", value="5<:coin:662071327242321942>/2<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Fish `fish` [Sell]", value="0.25<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Iron rod `ironrod` [Buy]", value="25<:coin:662071327242321942>", inline=False)
 			await ctx.send(embed=embed)
 		elif arg1 == 'hairdryer':
 			embed=discord.Embed(title="Info", color=0x50fe54)
+			
 			embed.add_field(name="Hairdryer", value="5<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Description", value="When used can get you 3 - 25 fish!", inline=True)
 			await ctx.send(embed=embed)
 		else:
 			embed=discord.Embed(title="Info", color=0x50fe54)
+			
 			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
 			await ctx.send(embed=embed)
 
@@ -458,6 +472,7 @@ class general(commands.Cog, name='General Commands'):
 			toc = ('name', 'hairdryer')
 			lentoc = len(toc) 
 			embed=discord.Embed(title="Inventory", color=0x50fe54)
+			
 			while check != lentoc:
 				check += 1
 				if fetchall[check-1] == 0 or fetchall[check-1] == str(ctx.author.id):
@@ -489,6 +504,7 @@ class general(commands.Cog, name='General Commands'):
 		toc = ('name', 'hairdryer')
 		lentoc = len(toc) 
 		embed=discord.Embed(title="Inventory", color=0x50fe54)
+		
 		while check != lentoc:
 			check += 1
 			if fetchall[check-1] == 0 or fetchall[check-1] == str(ctx.author.id):
