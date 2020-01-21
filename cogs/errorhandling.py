@@ -19,7 +19,7 @@ c = conn.cursor()
 
 c.execute("SELECT * from ran")
 fetchone = c.fetchone()
-rannumber = int(fetchone[0])+1
+rannumber = int(fetchone[0])
 
 
 class CommandErrorHandler(commands.Cog, name="ErrorHandler"):
@@ -36,6 +36,8 @@ class CommandErrorHandler(commands.Cog, name="ErrorHandler"):
 			await ctx.send("Missing Permissions")
 		elif isinstance(error, commands.CheckFailure):
 			await ctx.send("You don't have required permissions")
+		elif isinstance(error, commands.CommandOnCooldown):
+			await ctx.send('You are on a cooldown. Try again in {:.2f}s'.format(error.retry_after))
 
 		ctx.author = 'console'
 		erro = traceback.format_exception(type(error), error, error.__traceback__)
@@ -44,9 +46,9 @@ class CommandErrorHandler(commands.Cog, name="ErrorHandler"):
 		log(ctx, '\n\nIgnoring exception in command {}:'.format(ctx.command))
 		log(ctx, error)
 
-def log(ctx, logtext : str):
-	os.chdir('C:/Users/Lemon/Desktop/EconomyBot/logs')
-	log = open("log{}.log".format(rannumber), "a", encoding='utf-8')
+def log(ctx, logtext):
+	os.chdir('C:/Users/Lemon/Desktop/EconomyBot/errorlogs')
+	errorlog = open("errorlog{}.log".format(rannumber), "a", encoding='utf-8')
 	os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 	now = datetime.now()
 	ct = now.strftime("%H:%M:%S")
@@ -54,8 +56,8 @@ def log(ctx, logtext : str):
 		person = ''
 	else:
 		person = str(ctx.author.id)
-	log.write(f"\n{ct} | {ctx.author} {person} {logtext}")
-	log.close()
+	errorlog.write(f"\n{ct} | {ctx.author} {person} {logtext}")
+	errorlog.close()
 
 def setup(bot):
 	print("ErrorHandler")

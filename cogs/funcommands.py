@@ -6,6 +6,7 @@ import discord
 import os
 import sys
 from discord.ext import commands
+from discord.ext.commands.cooldowns import BucketType
 import asyncio
 from datetime import datetime
 import sqlite3
@@ -20,13 +21,15 @@ c = conn.cursor()
 
 c.execute("SELECT * from ran")
 fetchone = c.fetchone()
-rannumber = int(fetchone[0])+1
+rannumber = int(fetchone[0])
+
 
 class fun(commands.Cog, name='Fun Commands'):
 	def __init__(self, bot):
 		self.bot = bot
 
 	@commands.command()
+	@commands.cooldown(1, 5, commands.BucketType.user)
 	async def bully(self, ctx, member: discord.Member):
 		randint = random.randint(1,2)
 		if randint == 1:
@@ -35,6 +38,7 @@ class fun(commands.Cog, name='Fun Commands'):
 			await ctx.send(f"{member} has small brain")
 
 	@commands.command()
+	@commands.cooldown(1, 3, commands.BucketType.user)
 	async def dpy(self, ctx):
 		await ctx.send("Discord.py > Discord.js")
 
@@ -50,8 +54,9 @@ class fun(commands.Cog, name='Fun Commands'):
 		await ctx.send(text)
 
 	@commands.command(aliases=['axolotl'])
+	@commands.cooldown(1, 5, commands.BucketType.user)
 	async def randomaxolotl(self, ctx):
-		pics = 13
+		pics = 20
 		randint = random.randint(1, pics)
 		await ctx.send('', file=discord.File(f'C:/Users/Lemon/Desktop/EconomyBot/img/axolotl/axolotl{randint}.jpg'))
 

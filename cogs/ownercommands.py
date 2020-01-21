@@ -6,17 +6,17 @@ import math
 import os
 import sys
 from discord.ext import commands
+from discord.ext.commands.cooldowns import BucketType
 import asyncio
 from datetime import datetime
 import sqlite3
 from uuid import uuid4
 import psutil
 import itertools
+from random_word import RandomWords
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 
-splashesfile = open('splash.es', 'r', encoding="utf8")
-#   list(str(splashesfile.read()).split("-"))
-splashes = list(str(splashesfile.read()).split("-"))
+splashes = list(str(open('containerfiles/splash.es', 'r', encoding="utf-8").read()).split("-"))
 
 conn = sqlite3.connect("users.db")
 c = conn.cursor()
@@ -28,7 +28,7 @@ class owner(commands.Cog, name="Mod Commands"):
 	async def mod(ctx):
 		return ctx.author.id == 600798393459146784 or ctx.author.id == 362255701323677713 or ctx.author.id == 620244349984309251
 	async def code(ctx):
-		return mod() or ctx.author.id == 370120271367110656
+		return mod(ctx) or ctx.author.id == 370120271367110656
 
 	@commands.command()
 	@commands.check(mod)
@@ -120,7 +120,8 @@ class owner(commands.Cog, name="Mod Commands"):
 	@commands.command()
 	@commands.check(mod)
 	async def reload(self, ctx):
-		initial_extensions = ['cogs.generalcommands', 'cogs.errorhandling', 'cogs.ownercommands', 'cogs.helpcommand', 'cogs.eventcommands', 'cogs.funcommands']
+		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
+		initial_extensions = list(str(open('containerfiles/co.gs', 'r', encoding='utf-8').read()).split("-"))
 		print("\nReloaded Extensions\n")
 		for extension in initial_extensions:
 			self.bot.reload_extension(extension)
@@ -136,7 +137,7 @@ class owner(commands.Cog, name="Mod Commands"):
 		conn.commit()
 		rannum = str(rannumber).zfill(3)
 		version = 'Version {}.{}.{}'.format(str(rannum)[0], str(rannum)[1], str(rannum)[2])
-		splashran1 = random.randint(1,len(splashes))
+		splashran1 = random.randint(1-1,len(splashes)-1)
 		game=discord.Game(f'{version} | {splashes[splashran1]}') 
 		await ctx.send(f'{version} | {splashes[splashran1]}')
 		await self.bot.change_presence(status=discord.Status.online, activity=game)
@@ -145,7 +146,7 @@ class owner(commands.Cog, name="Mod Commands"):
 	@commands.check(mod)
 	async def code(self, ctx, start, end, file):
 		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
-		read = open(f"{file}.py", "r").readlines()[int(start)-1:int(end)]
+		read = open(f"{file}", "r").readlines()[int(start)-1:int(end)]
 		read = ' '.join(read)
 		read = codeblock(read)
 		await ctx.send(f'''>>> ```py
@@ -155,6 +156,17 @@ class owner(commands.Cog, name="Mod Commands"):
 		await ctx.send("[-] = `")
 		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 
+	@commands.command()
+	@commands.check(mod)
+	async def newsplash(self, ctx):
+		splashopen = open('containerfiles/splash.es', 'a', encoding="utf-8")
+		r = RandomWords()
+		randomword1 = r.get_random_word()
+		randomword2 = r.get_random_word()
+		splashopen.write(f'\b{randomword1} {randomword2}-'.replace('', ''))
+		splashopen.close()
+		await ctx.send(f'{randomword1} {randomword2}')
+
 
 def codeblock(text):
 	codeblockformat = text.replace('```', '[+]').replace('`', '[-]')
@@ -163,3 +175,4 @@ def codeblock(text):
 def setup(bot):
 	print("OwnerCommands")
 	bot.add_cog(owner(bot))
+#

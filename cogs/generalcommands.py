@@ -19,7 +19,8 @@ c = conn.cursor()
 
 c.execute("SELECT * from ran")
 fetchone = c.fetchone()
-rannumber = int(fetchone[0])+1
+rannumber = int(fetchone[0])
+
 
 class general(commands.Cog, name='General Commands'):
 	def __init__(self, bot):
@@ -33,6 +34,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@commands.command(name="start")
 	async def start(self, ctx):
+		easylog(ctx)
 		person = str(ctx.author.id)
 		c.execute("SELECT * from people WHERE name=?", (person,))
 		conn.commit()
@@ -40,13 +42,13 @@ class general(commands.Cog, name='General Commands'):
 		if fetch == None:
 			personhandler(person)
 			await ctx.send(f"{ctx.author.mention} You just got registed!")
-			log(ctx, f'started the game')
 		else:
 			await ctx.send(f"{ctx.author.mention} You're already registered")
 			await ctx.send("Do `f!help` for help!")
 
 	@commands.command()
 	async def restart(self, ctx, arg):
+		easylog(ctx)
 		if arg == 'yes':
 			await ctx.send("Restarting")
 			person = str(ctx.author.id)
@@ -65,6 +67,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@bal.command()
 	async def coin(self, ctx):
+		easylog(ctx)
 		person = str(ctx.author.id)
 		personhandler(person)
 		c.execute("SELECT * from people where name=?", (person,))
@@ -74,6 +77,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@bal.command(name="fish")
 	async def fishingbal(self, ctx):
+		easylog(ctx)
 		person = str(ctx.author.id)
 		personhandler(person)
 		c.execute("SELECT * from items where name=?", (person,))
@@ -84,12 +88,14 @@ class general(commands.Cog, name='General Commands'):
 
 	@commands.command()
 	async def update(self, ctx):
+		easylog(ctx)
 		person = str(ctx.author.id)
 		personhandler(person)
 		await ctx.send(f"{ctx.author.mention} Updated user Data")
 
 	@commands.command()
 	async def fish(self, ctx):
+		easylog(ctx)
 		mention = ctx.author.mention
 		person = str(ctx.author.id)
 		randexp = random.randint(1,4)
@@ -211,6 +217,7 @@ class general(commands.Cog, name='General Commands'):
 #:white_large_square: :green_square:
 	@commands.command()
 	async def level(self, ctx):
+		easylog(ctx)
 		person = str(ctx.author.id)
 		personhandler(person)
 		c.execute("SELECT * from levels WHERE name=?", (person,))
@@ -286,6 +293,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@commands.command()
 	async def status(self, ctx):
+		easylog(ctx)
 		ping1 = self.bot.latencies
 		ping = round(ping1[0][1]*1000, 1)
 		cpu = psutil.cpu_percent()
@@ -302,10 +310,12 @@ class general(commands.Cog, name='General Commands'):
 
 	@commands.command()
 	async def invite(self, ctx):
+		easylog(ctx)
 		await ctx.send(f"{ctx.author.mention} Do `f!status` to see invite link")
 
 	@commands.command()
 	async def vote(self, ctx):
+		easylog(ctx)
 		await ctx.send("https://top.gg/bot/627932116319076353/vote")
 
 #===========================================================================================================#
@@ -316,6 +326,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@commands.group()
 	async def shop(self, ctx):
+		easylog(ctx)
 		if ctx.invoked_subcommand is None:
 			embed=discord.Embed(title="Shop")
 			
@@ -328,6 +339,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@shop.command()
 	async def buy(self, ctx, arg1, arg2):
+		easylog(ctx)
 		mention = ctx.author.mentio
 		person = str(ctx.author.id)
 		personhandler(person)
@@ -388,6 +400,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@shop.command()
 	async def sell(self, ctx, arg1, arg2):
+		easylog(ctx)
 		mention = ctx.author.mention
 		person = str(ctx.author.id)
 		personhandler(person)
@@ -430,6 +443,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@shop.command()
 	async def info(self, ctx, arg):
+		easylog(ctx)
 		arg1 = str(arg.lower())
 		if arg1 == 'all':
 			embed=discord.Embed(title="Shop")
@@ -458,6 +472,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@commands.group()
 	async def inventory(self, ctx):
+		easylog(ctx)
 		if ctx.invoked_subcommand is None:
 			person = str(ctx.author.id)
 			personhandler(person)
@@ -491,6 +506,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@inventory.command(name='info')
 	async def info1(self, ctx):
+		easylog(ctx)
 		person = str(ctx.author.id)
 		personhandler(person)
 		c.execute("SELECT * from items WHERE name=?", (person,))
@@ -522,6 +538,7 @@ class general(commands.Cog, name='General Commands'):
 
 	@inventory.command()
 	async def use(self, ctx, arg1):
+		easylog(ctx)
 		arg = arg1.lower()
 		person = str(ctx.author.id)
 		personhandler(person)
@@ -616,7 +633,7 @@ def houseformat(person):
 	fetchall = c.fetchall()
 	fetchall = fetchall[0]
 
-def log(ctx, logtext):
+def log(ctx, logtext : str):
 	os.chdir('C:/Users/Lemon/Desktop/EconomyBot/logs')
 	log = open("log{}.log".format(rannumber), "a", encoding='utf-8')
 	os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
@@ -624,6 +641,16 @@ def log(ctx, logtext):
 	ct = now.strftime("%H:%M:%S")
 	person = str(ctx.author.id)
 	log.write(f"\n{ct} | {ctx.author} {person} {logtext}")
+	log.close()
+
+def easylog(ctx):
+	os.chdir('C:/Users/Lemon/Desktop/EconomyBot/logs')
+	log = open("log{}.log".format(rannumber), "a", encoding='utf-8')
+	os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
+	now = datetime.now()
+	ct = now.strftime("%H:%M:%S")
+	person = str(ctx.author.id)
+	log.write(f"\n{ct} | {ctx.author} {person} uses {ctx.command}")
 	log.close()
 
 def setup(bot):
