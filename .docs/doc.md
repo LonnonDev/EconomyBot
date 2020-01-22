@@ -4,7 +4,6 @@
 		<link rel="stylesheet" href="stylesheet.css">
 		<link rel="stylesheet" href="monokai-sublime.css">
 		<script src="highlight.pack.js"></script>
-		<script>hljs.initHighlightingOnLoad();</script>
 	</head>
 		<!-- General Commands Heading -->
 <div>
@@ -14,7 +13,9 @@
 <code>class general(commands.Cog, name='General Commands'):
 	def __init__(self, bot):
 		self.bot = bot</code></pre>
-<pre>This is the class section for the General commands, where it defines the bot arg, so it can be used later in the code for certain things.</pre>
+<pre>This is the class section for the General commands, 
+where it defines the bot arg, 
+so it can be used later in the code for certain things.</pre>
 </body></div>
 <h2>Commands</h2>
 <pre><code class="language-python">
