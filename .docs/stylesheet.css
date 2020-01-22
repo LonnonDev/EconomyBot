@@ -1,0 +1,42 @@
+html {
+	background: linear-gradient(to top, #669999 0%, #ffffff 100%);
+	background-repeat: no-repeat;
+	background-position: 0px 500px;
+	font-family: "Sans-serif", verdana, serif;
+}
+code {
+	background-color: #282923;
+	border: 1px solid #a3a3a3;
+	color: #FFFFFF;
+	display: block;
+	padding: 20px;
+}
+span.comment {
+	color: #908E8F;
+	white-space: nowrap;
+}
+span.red {
+	color: #FF6188;
+	white-space: nowrap;
+}
+span.lightblue {
+	color: #78DCE8;
+	white-space: nowrap;
+}
+
+span.orange {
+	color: #FC9867;
+	white-space: nowrap;
+}
+span.yellow {
+	color: #FFD866;
+	white-space: nowrap;
+}
+span.green {
+	color: #A9DC76;
+	white-space: nowrap;
+}
+span.purple {
+	color: #AB9DF2;
+	white-space: nowrap;
+}
