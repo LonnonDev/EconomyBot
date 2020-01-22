@@ -220,6 +220,7 @@ class general(commands.Cog, name='General Commands'):
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
+			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 		elif math.isclose(float(exp), float(levelingform)*0.20, rel_tol=0.2):
 			v1 = ":green_square:"
 			v2 = ":white_large_square:"
@@ -230,6 +231,7 @@ class general(commands.Cog, name='General Commands'):
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
+			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 		elif math.isclose(float(exp), float(levelingform)*0.40, rel_tol=0.2):
 			v1 = ":green_square:"
 			v2 = ":green_square:"
@@ -240,6 +242,7 @@ class general(commands.Cog, name='General Commands'):
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
+			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 		elif math.isclose(float(exp), float(levelingform)*0.60, rel_tol=0.2):
 			v1 = ":green_square:"
 			v2 = ":green_square:"
@@ -250,6 +253,7 @@ class general(commands.Cog, name='General Commands'):
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
+			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 		elif math.isclose(float(exp), float(levelingform)*0.80, rel_tol=0.2):
 			v1 = ":green_square:"
 			v2 = ":green_square:"
@@ -260,6 +264,7 @@ class general(commands.Cog, name='General Commands'):
 			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
+			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 		await ctx.send(embed=embed)
 
 
@@ -277,6 +282,7 @@ class general(commands.Cog, name='General Commands'):
 		embed.add_field(name="Invite", value="[Click here to invite](https://discordapp.com/api/oauth2/authorize?client_id=627932116319076353&permissions=1812462657&scope=bot)", inline=True)
 		embed.add_field(name="Trello", value="[Click here to go to Trello](https://trello.com/b/rzd1Y7C6/fishing-bot-thing)", inline=True)
 		embed.add_field(name="Github", value="[Click here to go to Github](https://github.com/LonnonjamesD/EconomyBot)", inline=True)
+		embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 		await ctx.send(embed=embed)
 
 	@commands.command()
@@ -303,6 +309,7 @@ class general(commands.Cog, name='General Commands'):
 			embed.add_field(name="Hairdryer `hairdryer` [Buy/Sell]", value="5<:coin:662071327242321942>/2<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Fish `fish` [Sell]", value="0.25<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Iron rod `ironrod` [Buy]", value="25<:coin:662071327242321942>", inline=False)
+			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 			await ctx.send(embed=embed)
 			await ctx.send(f"{ctx.author.mention} For more info do `[] = optional, <> = required` `f!shop <buy or sell or info> <item> [amount]`")
 
@@ -365,6 +372,7 @@ class general(commands.Cog, name='General Commands'):
 			
 			embed=discord.Embed(title="Shop", color=0x50fe54)
 			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
+			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 			await ctx.send(embed=embed)
 
 
@@ -411,17 +419,18 @@ class general(commands.Cog, name='General Commands'):
 			embed.add_field(name="Hairdryer `hairdryer` [Buy/Sell]", value="5<:coin:662071327242321942>/2<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Fish `fish` [Sell]", value="0.25<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Iron rod `ironrod` [Buy]", value="25<:coin:662071327242321942>", inline=False)
+			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 			await ctx.send(embed=embed)
 		elif arg1 == 'hairdryer':
 			embed=discord.Embed(title="Info", color=0x50fe54)
-			
 			embed.add_field(name="Hairdryer", value="5<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Description", value="When used can get you 3 - 25 fish!", inline=True)
+			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 			await ctx.send(embed=embed)
 		else:
 			embed=discord.Embed(title="Info", color=0x50fe54)
-			
 			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
+			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 			await ctx.send(embed=embed)
 
 #===========================================================================================================#
@@ -456,8 +465,10 @@ class general(commands.Cog, name='General Commands'):
 					itemammount = fetchall[check-1]
 					if itemammount > 1:
 						embed.add_field(name=itemname1, value="You have {:,.0f} {}s".format(itemammount, itemname1), inline=False)
+						embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 					else:
 						embed.add_field(name=itemname1, value="You have {:,.0f} {}".format(itemammount, itemname1), inline=False)
+						embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 			await ctx.send(embed=embed)
 			await ctx.send(f"{ctx.author.mention}  Do `f!inventory info <item>` for more info")
 
@@ -486,8 +497,10 @@ class general(commands.Cog, name='General Commands'):
 				itemammount = fetchall[check-1]
 				if itemammount > 1:
 					embed.add_field(name=itemname1, value="You have {:,.0f} {}s".format(itemammount, itemname1), inline=False)
+					embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 				else:
 					embed.add_field(name=itemname1, value="You have {:,.0f} {}".format(itemammount, itemname1), inline=False)
+					embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
 		await ctx.send(embed=embed)
 
 	@inventory.command()
