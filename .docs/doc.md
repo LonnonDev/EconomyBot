@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" href="stylesheet.css">
-		<link rel="stylesheet" href="monokai-sublime.css">
-		<script src="highlight.pack.js"></script>
 	</head>
 		<!-- General Commands Heading -->
 <div>
