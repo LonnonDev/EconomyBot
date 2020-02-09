@@ -14,12 +14,56 @@ from uuid import uuid4
 import psutil
 import itertools
 from random_word import RandomWords
+from os.path import isfile, join
+from os import listdir
+import subprocess
+import shlex
+import psutil
+from threading import Thread
+from discord.ext import menus
+from colorama import init
+from termcolor import colored
+init()
+
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 
 splashes = list(str(open('containerfiles/splash.es', 'r', encoding="utf-8").read()).split("-"))
 
 conn = sqlite3.connect("users.db")
 c = conn.cursor()
+
+clear = lambda: os.system('cls')
+
+class Guilds(menus.Menu):
+	async def send_initial_message(self, ctx, channel):
+		return await channel.send(f':one: [guilds number] :left_right_arrow: [guilds list] :stop_button: [stop]')
+
+	@menus.button('1\N{combining enclosing keycap}')
+	async def one(self, payload):
+		guilds = len([s for s in self.bot.guilds])
+		guildname = []
+		full = ''
+		for guild in self.bot.guilds:
+			guildname = guild.name
+			full += f"`{guildname}`, "
+		await self.message.edit(content=f'This bot is in {guilds} servers')
+
+	@menus.button('\U00002194')
+	async def leftrightarrow(self, payload):
+		guilds = len([s for s in self.bot.guilds])
+		guildname = []
+		full = ''
+		for guild in self.bot.guilds:
+			guildname = guild.name
+			full += f"`{guildname}`, "
+		await self.message.edit(content=full)
+
+	@menus.button('\N{BLACK SQUARE FOR STOP}\ufe0f')
+	async def on_stop(self, payload):
+		await self.author.message.delete()
+		await self.message.delete()
+		self.stop()
+
 
 class owner(commands.Cog, name="Mod Commands"):
 	def __init__(self, bot):
@@ -105,27 +149,34 @@ class owner(commands.Cog, name="Mod Commands"):
 			conn.commit()
 			await ctx.send(f"Updated {item} for <@!{person}>")
 
-	@commands.command()
+	@commands.command(aliases=['guild'])
 	@commands.check(mod)
 	async def guilds(self, ctx):
-		guilds = len([s for s in self.bot.guilds])
-		guildname = []
-		full = ''
-		for guild in self.bot.guilds:
-			guildname = guild.name
-			full += f"`{guildname}`, "
-		await ctx.send(f"{full}")
-		await ctx.send(f'This bot is in {guilds} servers')
+		g = Guilds()
+		await g.start(ctx)
 
 	@commands.command()
 	@commands.check(mod)
 	async def reload(self, ctx):
 		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 		initial_extensions = list(str(open('containerfiles/co.gs', 'r', encoding='utf-8').read()).split("-"))
-		print("\nReloaded Extensions\n")
+		clear()
+		print(colored("\nReloading...\n--------------------------------------", 'green'))
+		time.sleep(2)
 		for extension in initial_extensions:
 			self.bot.reload_extension(extension)
 		await ctx.send("Reloaded")
+
+	@commands.command()
+	@commands.check(mod)
+	async def selreload(self, ctx, reloadvar : str):
+		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
+		initial_extensions = [f'cogs.{reloadvar}']
+		print("Reloading")
+		time.sleep(2)
+		for extension in initial_extensions:
+			self.bot.reload_extension(extension)
+		await ctx.send(f"Reloaded {reloadvar}.py")
 
 	@commands.command()
 	@commands.check(mod)
@@ -167,12 +218,76 @@ class owner(commands.Cog, name="Mod Commands"):
 		splashopen.close()
 		await ctx.send(f'{randomword1} {randomword2}')
 
+	@commands.command()
+	@commands.check(mod)
+	async def files(self, ctx, path):
+		if path == 'home':
+			path = f'C:/Users/Lemon/Desktop/EconomyBot'
+			files = ''
+			for f in listdir(path):
+				files += f"{f}\n"
+			await ctx.send(f"""```css
+Here are the files in {path}
+------------------
+{files}```""")
+		else:
+			path = f'C:/Users/Lemon/Desktop/EconomyBot/{path}'
+			files = ''
+			for f in listdir(path):
+				files += f"{f}\n"
+			await ctx.send(f"""```css
+Here are the files in {path}
+------------------
+{files}```""")
+
+	@commands.command()
+	@commands.check(mod)
+	async def eval(self, ctx, *, code):
+		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
+		# opens the dummy file and writes the code
+		df = open('dummyfile.py', 'w', encoding="utf-8")
+		df.write(f'{code}')
+		df.close()
+		# opens the output and clears it
+		dfo = open('dummyfileout.txt', 'w', encoding="utf-8")
+		dfo.write('')
+		# sub process
+		sp = subprocess.Popen(["python", "dummyfile.py", ">", "dummyfileout.txt"], shell=True)
+		# checks the files
+		dfr = open('dummyfile.py', 'r', encoding="utf-8")
+		dfor = open('dummyfileout.txt', 'r', encoding="utf-8")
+		print(dfr.read())
+		print(dfor.read())
+		if dfr.read() == '':
+			dfrread = 'None'
+		else:
+			dfrread = str(dfr.read())
+		if dfor.read() == '':
+			dforread = 'None'
+		else:
+			dforread = str(dfor.read())
+		dfor.close()
+		dfr.close()
+		await ctx.send(f"""
+In:
+```
+{dfrread}
+```
+Out:```
+{dforread}
+```""")
+
+def kill(proc_pid):
+	process = psutil.Process(proc_pid)
+	for proc in process.children(recursive=True):
+		proc.kill()
+	process.kill()
 
 def codeblock(text):
 	codeblockformat = text.replace('```', '[+]').replace('`', '[-]')
 	return codeblockformat
 
+
 def setup(bot):
 	print("OwnerCommands")
 	bot.add_cog(owner(bot))
-#

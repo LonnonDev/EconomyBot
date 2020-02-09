@@ -4,6 +4,8 @@ import random
 import math
 import discord
 import os
+from os import listdir
+from os.path import isfile, join
 import sys
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
@@ -13,8 +15,14 @@ import sqlite3
 from uuid import uuid4
 import psutil
 import itertools
+import youtube_dl
+import lavalink
+from discord.ext import menus
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 
+ffmpeg_options = {
+	'options': '-vn'
+}
 
 conn = sqlite3.connect("users.db")
 c = conn.cursor()

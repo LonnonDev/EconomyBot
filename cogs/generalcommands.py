@@ -59,7 +59,7 @@ class general(commands.Cog, name='General Commands'):
 		else:
 			await ctx.send(f"{ctx.author.mention} Do `f!restart yes` to restart")
 
-	@commands.group(aliases=['balance'])
+	@commands.group(aliases=['balance', 'b'])
 	async def bal(self, ctx):
 		if ctx.invoked_subcommand is None:
 			await ctx.send(f"{ctx.author.mention} That's not a bal, please pick between `coin` or `fish`!")
@@ -92,7 +92,7 @@ class general(commands.Cog, name='General Commands'):
 		personhandler(person)
 		await ctx.send(f"{ctx.author.mention} Updated user Data")
 
-	@commands.command()
+	@commands.command(aliases=['f'])
 	async def fish(self, ctx):
 		easylog(ctx)
 		mention = ctx.author.mention
@@ -200,7 +200,7 @@ class general(commands.Cog, name='General Commands'):
 			else:
 				await ctx.send(f"{ctx.author.mention} You're already fishing!")
 
-	@commands.command()
+	@commands.command(aliases=['lvl', 'l'])
 	async def level(self, ctx):
 		easylog(ctx)
 		person = str(ctx.author.id)
@@ -210,62 +210,80 @@ class general(commands.Cog, name='General Commands'):
 		level = fetchlevel[0][1]
 		exp = fetchlevel[0][2]
 		levelingform = level**int(level/4)
-		if math.isclose(float(exp), float(levelingform)*0.00, rel_tol=0.2):
+		exppercent = round((exp/levelingform), 2)
+		if math.isclose(exppercent, 0.00, abs_tol=0.10):
 			v1 = ":white_large_square:"
 			v2 = ":white_large_square:"
 			v3 = ":white_large_square:"
 			v4 = ":white_large_square:"
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
-			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
+			embed.add_field(name=f"You're level {level}", value=f"{v1}{v2}{v3}{v4}{v5} ~{exppercent*100}%", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
-			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
-		elif math.isclose(float(exp), float(levelingform)*0.20, rel_tol=0.2):
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
+			await ctx.send(embed=embed)
+		elif math.isclose(exppercent, 0.20, abs_tol=0.10):
 			v1 = ":green_square:"
 			v2 = ":white_large_square:"
 			v3 = ":white_large_square:"
 			v4 = ":white_large_square:"
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
-			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
+			embed.add_field(name=f"You're level {level}", value=f"{v1}{v2}{v3}{v4}{v5} ~{exppercent*100}%", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
-			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
-		elif math.isclose(float(exp), float(levelingform)*0.40, rel_tol=0.2):
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
+			await ctx.send(embed=embed)
+		elif math.isclose(exppercent, 0.40, abs_tol=0.10):
 			v1 = ":green_square:"
 			v2 = ":green_square:"
 			v3 = ":white_large_square:"
 			v4 = ":white_large_square:"
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
-			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
+			embed.add_field(name=f"You're level {level}", value=f"{v1}{v2}{v3}{v4}{v5} ~{exppercent*100}%", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
-			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
-		elif math.isclose(float(exp), float(levelingform)*0.60, rel_tol=0.2):
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
+			await ctx.send(embed=embed)
+		elif math.isclose(exppercent, 0.60, abs_tol=0.10):
 			v1 = ":green_square:"
 			v2 = ":green_square:"
 			v3 = ":green_square:"
 			v4 = ":white_large_square:"
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
-			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
+			embed.add_field(name=f"You're level {level}", value=f"{v1}{v2}{v3}{v4}{v5} ~{exppercent*100}%", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
-			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
-		elif math.isclose(float(exp), float(levelingform)*0.80, rel_tol=0.2):
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
+			await ctx.send(embed=embed)
+		elif math.isclose(exppercent, 0.80, abs_tol=0.10):
 			v1 = ":green_square:"
 			v2 = ":green_square:"
 			v3 = ":green_square:"
 			v4 = ":green_square:"
 			v5 = ":white_large_square:"
 			embed=discord.Embed(title="Leveling", color=0x09a600)
-			embed.add_field(name=f"You're level {level}", value=f"~{v1}{v2}{v3}{v4}{v5}", inline=False)
+			embed.add_field(name=f"You're level {level}", value=f"{v1}{v2}{v3}{v4}{v5} ~{exppercent*100}%", inline=False)
 			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
 			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
-			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
-		await ctx.send(embed=embed)
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
+			await ctx.send(embed=embed)
+		elif math.isclose(exppercent, 1.00, abs_tol=0.10):
+			v1 = ":green_square:"
+			v2 = ":green_square:"
+			v3 = ":green_square:"
+			v4 = ":green_square:"
+			v5 = ":green_square:"
+			embed=discord.Embed(title="Leveling", color=0x09a600)
+			embed.add_field(name=f"You're level {level}", value=f"{v1}{v2}{v3}{v4}{v5} ~{exppercent*100}%", inline=False)
+			embed.add_field(name=f"You need {levelingform} exp to Level up", value=f"You have {exp} exp", inline=False)
+			embed.add_field(name=f"To get to Level {level+1}", value=f"You need {levelingform-exp} exp to level up!", inline=False)
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
+			await ctx.send(embed=embed)
+
 
 
 	@commands.command()
@@ -282,7 +300,7 @@ class general(commands.Cog, name='General Commands'):
 		embed.add_field(name="Invite", value="[Click here to invite](https://discordapp.com/api/oauth2/authorize?client_id=627932116319076353&permissions=1812462657&scope=bot)", inline=True)
 		embed.add_field(name="Trello", value="[Click here to go to Trello](https://trello.com/b/rzd1Y7C6/fishing-bot-thing)", inline=True)
 		embed.add_field(name="Github", value="[Click here to go to Github](https://github.com/LonnonjamesD/EconomyBot)", inline=True)
-		embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
+		embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
 		await ctx.send(embed=embed)
 
 	@commands.command()
@@ -299,9 +317,9 @@ class general(commands.Cog, name='General Commands'):
 
 #===========================================================================================================#
 #                                Shop Group
-#===========================================================================================================#
+#=======================================================================================================.avatar
 
-	@commands.group()
+	@commands.group(aliases=['sh'])
 	async def shop(self, ctx):
 		easylog(ctx)
 		if ctx.invoked_subcommand is None:
@@ -309,13 +327,15 @@ class general(commands.Cog, name='General Commands'):
 			embed.add_field(name="Hairdryer `hairdryer` [Buy/Sell]", value="5<:coin:662071327242321942>/2<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Fish `fish` [Sell]", value="0.25<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Iron rod `ironrod` [Buy]", value="25<:coin:662071327242321942>", inline=False)
-			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=ctx.author.avatar_url)
 			await ctx.send(embed=embed)
 			await ctx.send(f"{ctx.author.mention} For more info do `[] = optional, <> = required` `f!shop <buy or sell or info> <item> [amount]`")
 
 
 	@shop.command()
-	async def buy(self, ctx, arg1, arg2):
+	async def buy(self, ctx, item, amount):
+		arg1 = item
+		arg2 = amount
 		easylog(ctx)
 		mention = ctx.author.mentio
 		person = str(ctx.author.id)
@@ -372,12 +392,14 @@ class general(commands.Cog, name='General Commands'):
 			
 			embed=discord.Embed(title="Shop", color=0x50fe54)
 			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
-			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=ctx.author.avatar_url)
 			await ctx.send(embed=embed)
 
 
 	@shop.command()
-	async def sell(self, ctx, arg1, arg2):
+	async def sell(self, ctx, item, amount):
+		arg1 = item
+		arg2 = amount
 		easylog(ctx)
 		mention = ctx.author.mention
 		person = str(ctx.author.id)
@@ -402,16 +424,52 @@ class general(commands.Cog, name='General Commands'):
 				conn.commit()
 				c.execute("UPDATE people SET name=?, coins=? WHERE name=?", (person, float(moneyearned), person))
 				conn.commit()
-				await ctx.send(f"{mention} Sold " + str(argtwo) + " <:fish:662055365449351168>")
+				await ctx.send(f"{mention} Sold " + str(argtwo) + f" <:fish:662055365449351168> for {str(moneyearned)} ")
 				fishing = c.fetchone()
-				log(ctx, f'solded {str(argtwo)} {str(arg1)} for {str(moneyearned)} coins')
+				log(ctx, f'solded {str(argtwo)} {str(arg1)} for {str(moneyearned)} <:coin:662071327242321942>')
+			elif float(fishing2) < float(arg2):
+				await ctx.send(f"{mention} You don't have that many fish!")
+		else:
+			await ctx.send(f"{mention} You can't sell that!")
+
+	@commands.command()
+	async def sellnonshop(self, ctx, item, amount):
+		arg1 = item
+		arg2 = amount
+		easylog(ctx)
+		mention = ctx.author.mention
+		person = str(ctx.author.id)
+		personhandler(person)
+		argtwo = arg2
+		c.execute("SELECT * from items WHERE name=?", (person,))
+		conn.commit()
+		fishing = c.fetchone()
+		if str(arg1) == 'fish':
+			fishing1 = fishing[1]
+			fishing2 = fishing[2]
+			fishing = c.fetchone()
+			if int(fishing1) >= int(arg2):
+				c.execute("SELECT * from people WHERE name=?", (person,))
+				conn.commit()
+				money = c.fetchone()
+				moneyrn = float(money[1])
+				moneygetting = float(arg2) * 0.25
+				moneyearned = moneyrn + moneygetting
+				newfishbal = float(fishing1) - float(arg2)
+				c.execute("UPDATE items SET name=?, fish=?, fishing=? WHERE name=?", (person, newfishbal, fishing2, person))
+				conn.commit()
+				c.execute("UPDATE people SET name=?, coins=? WHERE name=?", (person, float(moneyearned), person))
+				conn.commit()
+				await ctx.send(f"{mention} Sold " + str(argtwo) + f" <:fish:662055365449351168> for {str(moneyearned)} ")
+				fishing = c.fetchone()
+				log(ctx, f'solded {str(argtwo)} {str(arg1)} for {str(moneyearned)} <:coin:662071327242321942>')
 			elif float(fishing2) < float(arg2):
 				await ctx.send(f"{mention} You don't have that many fish!")
 		else:
 			await ctx.send(f"{mention} You can't sell that!")
 
 	@shop.command()
-	async def info(self, ctx, arg):
+	async def info(self, ctx, item):
 		easylog(ctx)
 		arg1 = str(arg.lower())
 		if arg1 == 'all':
@@ -419,19 +477,83 @@ class general(commands.Cog, name='General Commands'):
 			embed.add_field(name="Hairdryer `hairdryer` [Buy/Sell]", value="5<:coin:662071327242321942>/2<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Fish `fish` [Sell]", value="0.25<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Iron rod `ironrod` [Buy]", value="25<:coin:662071327242321942>", inline=False)
-			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=ctx.author.avatar_url)
 			await ctx.send(embed=embed)
 		elif arg1 == 'hairdryer':
 			embed=discord.Embed(title="Info", color=0x50fe54)
 			embed.add_field(name="Hairdryer", value="5<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Description", value="When used can get you 3 - 25 fish!", inline=True)
-			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=ctx.author.avatar_url)
 			await ctx.send(embed=embed)
 		else:
 			embed=discord.Embed(title="Info", color=0x50fe54)
 			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
-			embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=ctx.author.avatar_url)
 			await ctx.send(embed=embed)
+
+	@commands.command(name='buy')
+	async def buynonshop(self, ctx, item, amount):
+		arg1 = item
+		arg2 = amount
+		easylog(ctx)
+		mention = ctx.author.mentio
+		person = str(ctx.author.id)
+		personhandler(person)
+		c.execute("SELECT * from people where name=?", (person,))
+		conn.commit()
+		e = c.fetchone()
+		coins = e[1]
+		arg11 = arg1.lower()
+		if arg11 == 'hairdryer':
+			if float(coins) >= float(5)*float(arg2):
+				c.execute("SELECT * from inventory where name=?", (person,))
+				conn.commit()
+				d = c.fetchone()
+				c.execute("SELECT * from people where name=?", (person,))
+				conn.commit()
+				f = c.fetchone()
+				crn = f[1]
+				await ctx.send("Bought " + str(arg2) + " hairdryer(s)")
+				c.execute("UPDATE inventory set hairdryer=? where name=?", (int(irn)+int(arg2), person))
+				conn.commit()
+				c.execute("UPDATE people set coins=? where name=?", (int(crn)-5*int(arg2), person))
+				conn.commit()
+				fishing = c.fetchone()
+				log(ctx, f'bought {str(arg2)} {str(arg1)}(s)')
+			else:
+				await ctx.send("Sorry you don't have enough coins!")
+		elif arg11 == 'ironrod':
+			c.execute("SELECT * from items where name=?", (person,))
+			conn.commit()
+			e = c.fetchone()
+			if str(e[0]) == 'ironrod':
+				if float(coins) >= float(50):
+					c.execute("SELECT * from items where name=?", (person,))
+					conn.commit()
+					d = c.fetchall()
+					c.execute("SELECT * from people where name=?", (person,))
+					conn.commit()
+					f = c.fetchall()
+					crn = f[0][1]
+					irn = d[0][3]
+					await ctx.send("Bought " + str(arg2) + " Iron rod(s)")
+					c.execute("UPDATE items set fishingrods=? where name=?", (str(arg11), person))
+					conn.commit()
+					c.execute("UPDATE people set coins=? where name=?", (int(crn)-25, person))
+					conn.commit()
+					fishing = c.fetchone()
+					log(ctx, f'bought {str(arg2)} {str(arg1)}(s)')
+				else:
+					await ctx.send(f"{ctx.author.mention} Sorry you don't have enough coins!")
+			else:
+				await ctx.send(f"{ctx.author.mention} You already have the iron rod!")
+		else:
+			
+			embed=discord.Embed(title="Shop", color=0x50fe54)
+			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
+			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=ctx.author.avatar_url)
+			await ctx.send(embed=embed)
+
 
 #===========================================================================================================#
 
@@ -439,7 +561,7 @@ class general(commands.Cog, name='General Commands'):
 #                                Inventory Group
 #===========================================================================================================#
 
-	@commands.group()
+	@commands.group(aliases=['i', 'inv'])
 	async def inventory(self, ctx):
 		easylog(ctx)
 		if ctx.invoked_subcommand is None:
@@ -465,10 +587,10 @@ class general(commands.Cog, name='General Commands'):
 					itemammount = fetchall[check-1]
 					if itemammount > 1:
 						embed.add_field(name=itemname1, value="You have {:,.0f} {}s".format(itemammount, itemname1), inline=False)
-						embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
+						embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
 					else:
 						embed.add_field(name=itemname1, value="You have {:,.0f} {}".format(itemammount, itemname1), inline=False)
-						embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
+						embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
 			await ctx.send(embed=embed)
 			await ctx.send(f"{ctx.author.mention}  Do `f!inventory info <item>` for more info")
 
@@ -497,10 +619,10 @@ class general(commands.Cog, name='General Commands'):
 				itemammount = fetchall[check-1]
 				if itemammount > 1:
 					embed.add_field(name=itemname1, value="You have {:,.0f} {}s".format(itemammount, itemname1), inline=False)
-					embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
+					embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
 				else:
 					embed.add_field(name=itemname1, value="You have {:,.0f} {}".format(itemammount, itemname1), inline=False)
-					embed.set_author(name="Vote", url="https://top.gg/bot/627932116319076353/vote")
+					embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
 		await ctx.send(embed=embed)
 
 	@inventory.command()

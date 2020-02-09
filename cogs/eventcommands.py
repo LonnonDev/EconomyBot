@@ -26,14 +26,16 @@ class event(commands.Cog, name='Event Commands'):
 		self.bot = bot
 
 	@commands.command()
-	async def splashtext(self, ctx, *, text):
+	async def splashtext(self, ctx, *, text : str):
 		person = str(ctx.author.id)
+		if text == None:
+			await ctx.send("Text is none")
 		c.execute("SELECT * from event WHERE name=?", (person,))
 		fetchone = c.fetchone()
 		if fetchone is None:
 			c.execute("INSERT INTO event (name) VALUES (?)", (person,))
 			conn.commit()
-		c.execute("UPDATE event SET splashtxt=? WHERE name=?", (str(arg), person))
+		c.execute("UPDATE event SET splashtxt=? WHERE name=?", (str(text), person))
 		conn.commit()
 		await ctx.send("Submitted entry for splashtxt, and or edited entry")
 

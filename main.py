@@ -17,6 +17,9 @@ import itertools
 import shutil
 import dbl
 from random_word import RandomWords
+from colorama import init
+from termcolor import colored
+init()
 
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 bottype = list(sys.argv)
@@ -122,7 +125,7 @@ f.close()
 logerror.write(f"ErrorLog{rannumber}.log | {ct}\n")
 logerror.close()
 rannum = str(rannumber).zfill(3)
-print('Version {}.{}.{}'.format(str(rannum)[0], str(rannum)[1], str(rannum)[2]))
+print(colored('Version {}.{}.{}'.format(str(rannum)[0], str(rannum)[1], str(rannum)[2]), 'magenta'))
 version = 'Version {}.{}.{}'.format(str(rannum)[0], str(rannum)[1], str(rannum)[2])
 
 splashran1 = random.randint(1-1,len(splashes)-1)
