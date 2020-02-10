@@ -91,7 +91,7 @@ shardids = 1
 shardcount = 1
 splashes = list(str(open('containerfiles/splash.es', 'r', encoding="utf-8").read()).split("-"))
 initial_extensions = list(str(open('containerfiles/co.gs', 'r', encoding='utf-8').read()).split("-"))
-commandprefix = ('f! ', 'f1 ', 'F! ', 'F1 ', 'f!', 'f1', 'F1', 'F!')
+commandprefix = ('f! ', 'f1 ', 'F! ', 'F1 ', 'f!', 'f1', 'F1', 'F!', 'Wolfeschlegelsteinhausenbergerdorff.')
 #====================#
 
 #====================#

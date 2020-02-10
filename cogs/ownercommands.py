@@ -195,20 +195,6 @@ class owner(commands.Cog, name="Mod Commands"):
 
 	@commands.command()
 	@commands.check(mod)
-	async def code(self, ctx, start, end, file):
-		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
-		read = open(f"{file}", "r").readlines()[int(start)-1:int(end)]
-		read = ' '.join(read)
-		read = codeblock(read)
-		await ctx.send(f'''>>> ```py
- {read}
-```''')
-		await ctx.send("[+] = ```")
-		await ctx.send("[-] = `")
-		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
-
-	@commands.command()
-	@commands.check(mod)
 	async def newsplash(self, ctx):
 		splashopen = open('containerfiles/splash.es', 'a', encoding="utf-8")
 		r = RandomWords()
@@ -217,28 +203,6 @@ class owner(commands.Cog, name="Mod Commands"):
 		splashopen.write(f'\b{randomword1} {randomword2}-'.replace('', ''))
 		splashopen.close()
 		await ctx.send(f'{randomword1} {randomword2}')
-
-	@commands.command()
-	@commands.check(mod)
-	async def files(self, ctx, path):
-		if path == 'home':
-			path = f'C:/Users/Lemon/Desktop/EconomyBot'
-			files = ''
-			for f in listdir(path):
-				files += f"{f}\n"
-			await ctx.send(f"""```css
-Here are the files in {path}
-------------------
-{files}```""")
-		else:
-			path = f'C:/Users/Lemon/Desktop/EconomyBot/{path}'
-			files = ''
-			for f in listdir(path):
-				files += f"{f}\n"
-			await ctx.send(f"""```css
-Here are the files in {path}
-------------------
-{files}```""")
 
 	@commands.command()
 	@commands.check(mod)
@@ -282,11 +246,6 @@ def kill(proc_pid):
 	for proc in process.children(recursive=True):
 		proc.kill()
 	process.kill()
-
-def codeblock(text):
-	codeblockformat = text.replace('```', '[+]').replace('`', '[-]')
-	return codeblockformat
-
 
 def setup(bot):
 	print("OwnerCommands")

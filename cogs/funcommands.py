@@ -68,6 +68,45 @@ class fun(commands.Cog, name='Fun Commands'):
 		randint = random.randint(1, pics)
 		await ctx.send('', file=discord.File(f'C:/Users/Lemon/Desktop/EconomyBot/img/axolotl/axolotl{randint}.jpg'))
 
+	@commands.command()
+	async def files(self, ctx, path):
+		if path == 'home':
+			path = f'C:/Users/Lemon/Desktop/EconomyBot'
+			files = ''
+			for f in listdir(path):
+				files += f"{f}\n"
+			await ctx.send(f"""```css
+Here are the files in {path}
+------------------
+{files}```""")
+		else:
+			path = f'C:/Users/Lemon/Desktop/EconomyBot/{path}'
+			files = ''
+			for f in listdir(path):
+				files += f"{f}\n"
+			await ctx.send(f"""```css
+Here are the files in {path}
+------------------
+{files}```""")
+
+	@commands.command()
+	async def code(self, ctx, start, end, file):
+		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
+		read = open(f"{file}", "r").readlines()[int(start)-1:int(end)]
+		read = ' '.join(read)
+		read = codeblock(read)
+		await ctx.send(f'''>>> ```py
+ {read}
+```''')
+		await ctx.send("[+] = ```")
+		await ctx.send("[-] = `")
+		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
+
+def codeblock(text):
+	codeblockformat = text.replace('```', '[+]').replace('`', '[-]')
+	return codeblockformat
+
+
 def setup(bot):
 	print('FunCommands')
 	bot.add_cog(fun(bot))
