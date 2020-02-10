@@ -13,3 +13,6 @@ errorlogs
 img
 axolotl
 *.mp3
+*.pyc
+*.pyc
+users.db
