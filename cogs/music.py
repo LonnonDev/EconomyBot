@@ -40,6 +40,27 @@ ffmpeg_options = {
 
 queue = []
 
+class YTDLSource(discord.PCMVolumeTransformer):
+    def __init__(self, source, *, data, volume=0.5):
+        super().__init__(source, volume)
+
+        self.data = data
+
+        self.title = data.get('title')
+        self.url = data.get('url')
+
+    @classmethod
+    async def from_url(cls, url, *, loop=None, stream=False):
+        loop = loop or asyncio.get_event_loop()
+        data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
+
+        if 'entries' in data:
+            # take first item from a playlist
+            data = data['entries'][0]
+
+        filename = data['url'] if stream else ytdl.prepare_filename(data)
+        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+
 class Music(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
@@ -52,14 +73,12 @@ class Music(commands.Cog):
 		pass
 
 	@commands.command(name="join")
-	@commands.check(beta)
 	async def vcjoin(self, ctx):
 		channel = ctx.message.author.voice.channel
 		await channel.connect()
 		await ctx.send("Joining...")
 
 	@commands.command(name="leave")
-	@commands.check(beta)
 	async def vcleave(self, ctx):
 		try:
 			await ctx.voice_client.disconnect()
@@ -67,7 +86,6 @@ class Music(commands.Cog):
 			await ctx.send("I'm not in a vc :/")
 
 	@commands.command()
-	@commands.check(beta)
 	async def play(self, ctx, vol : float, *, query : str):
 		async with ctx.typing():
 			source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(f"C:/Users/Lemon/Desktop/EconomyBot/music/{query}.mp3", executable='C:/Users/Lemon/AppData/Local/ffmpeg/ffmpeg.exe', options=ffmpeg_options), volume=vol)
@@ -75,7 +93,6 @@ class Music(commands.Cog):
 			await ctx.send('Now playing: {}'.format(query))
 
 	@commands.command(aliases=['music', 'muslib'])
-	@commands.check(beta)
 	async def musiclib(self, ctx):
 		path = f'C:/Users/Lemon/Desktop/EconomyBot/Music'
 		files = ''
@@ -86,6 +103,10 @@ Here is all the music we have currently
 Do "play <filename>", remove the .mp3 btw
 ------------------
 {files}```""")
+
+	@commands.command()
+	async def download(self, ctx, *, url):
+		await YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
 
 
 def setup(bot):

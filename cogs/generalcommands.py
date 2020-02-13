@@ -13,6 +13,7 @@ from uuid import uuid4
 import psutil
 from os import listdir
 import itertools
+from datetime import datetime
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 
 conn = sqlite3.connect("users.db")
@@ -54,6 +55,7 @@ class general(commands.Cog, name='General Commands'):
 			await ctx.send("Restarting")
 			person = str(ctx.author.id)
 			c.execute("DELETE from items where name=?", (person,))
+			conn.commit()
 			c.execute("DELETE from people where name=?", (person,))
 			conn.commit()
 			await ctx.send("Done!")
@@ -96,7 +98,10 @@ class general(commands.Cog, name='General Commands'):
 
 	@commands.command(aliases=['f'])
 	async def fish(self, ctx):
-		rods = {"standard": str(1) + '-You caught-30-240', "ironrod": str(random.randint(1,3)) + '-You caught-30-200', "god": str(random.randint(1,1000)) + '-You caught-1-1', "luv": str(2) + '-You caught-30-60'}
+		now = datetime. now()
+		chance = random.randint(1,100)
+		current_time = now.strftime("%H:%M:%S")
+		rods = {"standard": str(1) + '-You caught-30-240', "ironrod": str(random.randint(1,3)) + '-You caught-30-200', "god": str(random.randint(1,1000)) + '-You caught-1-60', "luv": str(2) + '-You caught-30-60'}
 		mention = ctx.author.mention
 		person = str(ctx.author.id)
 		randexp = random.randint(1,4)
@@ -109,51 +114,104 @@ class general(commands.Cog, name='General Commands'):
 		randexp = random.randint(1,4)
 		personhandler(person)
 		c.execute("SELECT * from items WHERE name=?", (person,))
-		if fishing[2] == 0:
-			c.execute("SELECT * from items WHERE name=?", (person,))
-			conn.commit()
-			fishing = c.fetchone()
+		conn.commit()
+		if chance != 1:
+			if fishing[2] == 0:
+				c.execute("SELECT * from items WHERE name=?", (person,))
+				conn.commit()
+				fishing = c.fetchone()
 
-			fishing3 = fishing[3]
-			path = f'C:/Users/Lemon/Desktop/EconomyBot/img/fish'
-			files = ''
-			for f in listdir(path):
-				files += f + ':'
-			files = files.split(':')
-			filerand = random.randint(0, (int((len(files))-1)))
-			randomimg = files[filerand]
-			fishtype = randomimg.split('-')[0]
-			fishamount = int(rods[fishing3].split('-')[0])
-			timemin = int(rods[fishing3].split('-')[2])
-			timemax = int(rods[fishing3].split('-')[3])
-			fishget = fishamount
-			await asyncio.sleep(random.randint(int(timemin),int(timemax)))
+				fishing3 = fishing[3]
+				path = f'C:/Users/Lemon/Desktop/EconomyBot/img/fish'
+				files = ''
+				for f in listdir(path):
+					files += f + ':'
+				files = files.split(':')
+				filerand = random.randint(0, (int((len(files))-1)))
+				randomimg = files[filerand]
+				fishtype = randomimg.split('-')[0]
+				fishamount = int(rods[fishing3].split('-')[0])
+				timemin = int(rods[fishing3].split('-')[2])
+				timemax = int(rods[fishing3].split('-')[3])
+				fishget = fishamount
+				fishamm = float(fishing[1])
+				c.execute("UPDATE items SET name=?, fish=?, fishing=1 WHERE name=?", (person, fishamm, person))
+				conn.commit()
+				timesleep = random.randint(int(timemin),int(timemax))
 
-			fishamm = float(fishing[1])
-			c.execute("UPDATE items SET name=?, fish=?, fishing=0 WHERE name=?", (person, fishamm, person))
-			conn.commit()
-			c.execute("SELECT * from items WHERE name=?", (person,))
-			conn.commit()
-			fishing = c.fetchone()
-			await ctx.send(f"{mention} You started fishing...")
-			c.execute("UPDATE items SET name=?, fish=?, fishing=0 WHERE name=?", (person, float(fishamm)+float(fishget), person))
-			conn.commit()
+				c.execute("SELECT * from items WHERE name=?", (person,))
+				conn.commit()
+				fishing = c.fetchone()
+				await ctx.send("{} You started fishing... ({:,.0f}sec cool down)".format(mention, timesleep))
+				await asyncio.sleep(timesleep)
+				c.execute("UPDATE items SET name=?, fish=?, fishing=0 WHERE name=?", (person, float(fishamm)+float(fishget), person))
+				conn.commit()
 
-			try:
-				if fishget < 2:
-					await ctx.send(f"{mention} caught {fishget} {fishtype} <:fish:662055365449351168>!", file=discord.File(f'img/fish/{randomimg}'))
-				else:
-					await ctx.send(f"{mention} caught {fishget} {fishtype}'s <:fish:662055365449351168>!", file=discord.File(f'img/fish/{randomimg}'))
-			except:
-				if fishget < 2:
-					await ctx.send(f"{mention} caught {fishget} {fishtype} <:fish:662055365449351168>!")
-				else:
-					await ctx.send(f"{mention} caught {fishget} {fishtype}'s <:fish:662055365449351168>!")
-			getexp(person, randexp)
-			fishing = c.fetchone()
-			log(ctx, f'caught {fishget} fish')
-		else:
-			await ctx.send("You're already fishing!")
+				try:
+					if fishget < 2:
+						await ctx.send("{} caught {:,.0f} {} <:fish:662055365449351168>!".format(mention, fishget, fishtype), file=discord.File(f'img/fish/{randomimg}'))
+					else:
+						await ctx.send("{} caught {:,.0f} {}'s <:fish:662055365449351168>!".format(mention, fishget, fishtype), file=discord.File(f'img/fish/{randomimg}'))
+				except:
+					if fishget < 2:
+						await ctx.send("{} caught {:,.0f} {} <:fish:662055365449351168>!".format(mention, fishget, fishtype))
+					else:
+						await ctx.send("{} caught {:,.0f} {}'s <:fish:662055365449351168>!".format(mention, fishget, fishtype))
+				getexp(person, randexp)
+				fishing = c.fetchone()
+				print(fishget*10)
+				log(ctx, f'caught {fishget} fish')
+			else:
+				await ctx.send("You're already fishing!")
+		elif chance == 1:
+			if fishing[2] == 0:
+				c.execute("SELECT * from items WHERE name=?", (person,))
+				conn.commit()
+				fishing = c.fetchone()
+
+				fishing3 = fishing[3]
+				path = f'C:/Users/Lemon/Desktop/EconomyBot/img/fish'
+				files = ''
+				for f in listdir(path):
+					files += f + ':'
+				files = files.split(':')
+				filerand = random.randint(0, (int((len(files))-1)))
+				randomimg = files[filerand]
+				fishtype = randomimg.split('-')[0]
+				fishamount = int(rods[fishing3].split('-')[0])
+				timemin = int(rods[fishing3].split('-')[2])
+				timemax = int(rods[fishing3].split('-')[3])
+				fishget = fishamount
+				fishamm = float(fishing[1])
+				c.execute("UPDATE items SET name=?, fish=?, fishing=1 WHERE name=?", (person, fishamm, person))
+				conn.commit()
+				timesleep = random.randint(int(timemin),int(timemax))
+
+				c.execute("SELECT * from items WHERE name=?", (person,))
+				conn.commit()
+				fishing = c.fetchone()
+				await ctx.send("{} You started fishing... ({:,.0f}sec cool down)".format(mention, timesleep))
+				await asyncio.sleep(timesleep)
+				c.execute("UPDATE items SET name=?, fish=?, fishing=0 WHERE name=?", (person, float(fishamm)+float(fishget*10), person))
+				conn.commit()
+
+				try:
+					if fishget < 2:
+						await ctx.send("**CRITICAL CATCH**! {} caught {:,.0f} {} <:fish:662055365449351168>!".format(mention, fishget, fishtype), file=discord.File(f'img/fish/{randomimg}'))
+					else:
+						await ctx.send("**CRITICAL CATCH**! {} caught {:,.0f} {}'s <:fish:662055365449351168>!".format(mention, fishget*10, fishtype), file=discord.File(f'img/fish/{randomimg}'))
+				except:
+					if fishget < 2:
+						await ctx.send("**CRITICAL CATCH**! {} caught {:,.0f} {} <:fish:662055365449351168>!".format(mention, fishget, fishtype))
+					else:
+						await ctx.send("**CRITICAL CATCH**! {} caught {:,.0f} {}'s <:fish:662055365449351168>!".format(mention, fishget, fishtype))
+				getexp(person, randexp)
+				fishing = c.fetchone()
+				log(ctx, f'caught {fishget} fish')
+			else:
+				await ctx.send("You're already fishing!")
+
+
 
 	@commands.command(aliases=['lvl', 'l'])
 	async def level(self, ctx):
@@ -161,6 +219,7 @@ class general(commands.Cog, name='General Commands'):
 		person = str(ctx.author.id)
 		personhandler(person)
 		c.execute("SELECT * from levels WHERE name=?", (person,))
+		conn.commit()
 		fetchlevel = c.fetchall()
 		level = fetchlevel[0][1]
 		exp = fetchlevel[0][2]
@@ -239,8 +298,6 @@ class general(commands.Cog, name='General Commands'):
 			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=str(ctx.author.avatar_url))
 			await ctx.send(embed=embed)
 
-
-
 	@commands.command()
 	async def status(self, ctx):
 		easylog(ctx)
@@ -281,7 +338,7 @@ class general(commands.Cog, name='General Commands'):
 			embed=discord.Embed(title="Shop")
 			embed.add_field(name="Hairdryer `hairdryer` [Buy/Sell]", value="5<:coin:662071327242321942>/2<:coin:662071327242321942>", inline=False)
 			embed.add_field(name="Fish `fish` [Sell]", value="0.25<:coin:662071327242321942>", inline=False)
-			embed.add_field(name="Iron rod `ironrod` [Buy]", value="25<:coin:662071327242321942>", inline=False)
+			embed.add_field(name="Iron rod `ironrod` [Buy]", value="150<:coin:662071327242321942>", inline=False)
 			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=ctx.author.avatar_url)
 			await ctx.send(embed=embed)
 			await ctx.send(f"{ctx.author.mention} For more info do `[] = optional, <> = required` `f!shop <buy or sell or info> <item> [amount]`")
@@ -292,12 +349,15 @@ class general(commands.Cog, name='General Commands'):
 		arg1 = item
 		arg2 = amount
 		easylog(ctx)
-		mention = ctx.author.mentio
+		mention = ctx.author.mention
 		person = str(ctx.author.id)
 		personhandler(person)
 		c.execute("SELECT * from people where name=?", (person,))
 		conn.commit()
 		e = c.fetchone()
+		c.execute("SELECT * from items where name=?", (person,))
+		conn.commit()
+		d = c.fetchone()
 		coins = e[1]
 		arg11 = arg1.lower()
 		if arg11 == 'hairdryer':
@@ -322,8 +382,8 @@ class general(commands.Cog, name='General Commands'):
 			c.execute("SELECT * from items where name=?", (person,))
 			conn.commit()
 			e = c.fetchone()
-			if str(e[0]) == 'ironrod':
-				if float(coins) >= float(50):
+			if str(d[3]) != 'ironrod':
+				if float(coins) >= float(150):
 					c.execute("SELECT * from items where name=?", (person,))
 					conn.commit()
 					d = c.fetchall()
@@ -387,41 +447,15 @@ class general(commands.Cog, name='General Commands'):
 		else:
 			await ctx.send(f"{mention} You can't sell that!")
 
-	@commands.command()
-	async def sellnonshop(self, ctx, item, amount):
-		arg1 = item
-		arg2 = amount
-		easylog(ctx)
-		mention = ctx.author.mention
-		person = str(ctx.author.id)
-		personhandler(person)
-		argtwo = arg2
-		c.execute("SELECT * from items WHERE name=?", (person,))
-		conn.commit()
-		fishing = c.fetchone()
-		if str(arg1) == 'fish':
-			fishing1 = fishing[1]
-			fishing2 = fishing[2]
-			fishing = c.fetchone()
-			if int(fishing1) >= int(arg2):
-				c.execute("SELECT * from people WHERE name=?", (person,))
-				conn.commit()
-				money = c.fetchone()
-				moneyrn = float(money[1])
-				moneygetting = float(arg2) * 0.25
-				moneyearned = moneyrn + moneygetting
-				newfishbal = float(fishing1) - float(arg2)
-				c.execute("UPDATE items SET name=?, fish=?, fishing=? WHERE name=?", (person, newfishbal, fishing2, person))
-				conn.commit()
-				c.execute("UPDATE people SET name=?, coins=? WHERE name=?", (person, float(moneyearned), person))
-				conn.commit()
-				await ctx.send(f"{mention} Sold " + str(argtwo) + f" <:fish:662055365449351168> for {str(moneyearned)} ")
-				fishing = c.fetchone()
-				log(ctx, f'solded {str(argtwo)} {str(arg1)} for {str(moneyearned)} <:coin:662071327242321942>')
-			elif float(fishing2) < float(arg2):
-				await ctx.send(f"{mention} You don't have that many fish!")
-		else:
-			await ctx.send(f"{mention} You can't sell that!")
+	@commands.command(name="sell")
+	async def sell_(self, ctx, item, amount):
+		command = self.bot.get_command("shop sell")
+		await ctx.invoke(command, item, amount)
+
+	@commands.command(name="buy")
+	async def buy_(self, ctx, item, amount):
+		command = self.bot.get_command("shop buy")
+		await ctx.invoke(command, item, amount)
 
 	@shop.command()
 	async def info(self, ctx, item):
@@ -445,64 +479,6 @@ class general(commands.Cog, name='General Commands'):
 			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
 			embed.set_author(name="Upvote The Bot!", url="https://top.gg/bot/627932116319076353/vote", icon_url=ctx.author.avatar_url)
 			await ctx.send(embed=embed)
-
-	@commands.command(name='buy')
-	async def buynonshop(self, ctx, item, amount):
-		arg1 = item
-		arg2 = amount
-		easylog(ctx)
-		mention = ctx.author.mentio
-		person = str(ctx.author.id)
-		personhandler(person)
-		c.execute("SELECT * from people where name=?", (person,))
-		conn.commit()
-		e = c.fetchone()
-		coins = e[1]
-		arg11 = arg1.lower()
-		if arg11 == 'hairdryer':
-			if float(coins) >= float(5)*float(arg2):
-				c.execute("SELECT * from inventory where name=?", (person,))
-				conn.commit()
-				d = c.fetchone()
-				c.execute("SELECT * from people where name=?", (person,))
-				conn.commit()
-				f = c.fetchone()
-				crn = f[1]
-				await ctx.send("Bought " + str(arg2) + " hairdryer(s)")
-				c.execute("UPDATE inventory set hairdryer=? where name=?", (int(irn)+int(arg2), person))
-				conn.commit()
-				c.execute("UPDATE people set coins=? where name=?", (int(crn)-5*int(arg2), person))
-				conn.commit()
-				fishing = c.fetchone()
-				log(ctx, f'bought {str(arg2)} {str(arg1)}(s)')
-			else:
-				await ctx.send("Sorry you don't have enough coins!")
-		elif arg11 == 'ironrod':
-			c.execute("SELECT * from items where name=?", (person,))
-			conn.commit()
-			e = c.fetchone()
-			if str(e[0]) == 'ironrod':
-				if float(coins) >= float(50):
-					c.execute("SELECT * from items where name=?", (person,))
-					conn.commit()
-					d = c.fetchall()
-					c.execute("SELECT * from people where name=?", (person,))
-					conn.commit()
-					f = c.fetchall()
-					crn = f[0][1]
-					irn = d[0][3]
-					await ctx.send("Bought " + str(arg2) + " Iron rod(s)")
-					c.execute("UPDATE items set fishingrods=? where name=?", (str(arg11), person))
-					conn.commit()
-					c.execute("UPDATE people set coins=? where name=?", (int(crn)-25, person))
-					conn.commit()
-					fishing = c.fetchone()
-					log(ctx, f'bought {str(arg2)} {str(arg1)}(s)')
-				else:
-					await ctx.send(f"{ctx.author.mention} Sorry you don't have enough coins!")
-			else:
-				await ctx.send(f"{ctx.author.mention} You already have the iron rod!")
-		else:
 			
 			embed=discord.Embed(title="Shop", color=0x50fe54)
 			embed.add_field(name="Invalid Item", value="Sorry that isn't an item...", inline=True)
@@ -594,6 +570,7 @@ class general(commands.Cog, name='General Commands'):
 		if arg in toc:
 			if fetchall[int(arg in toc)] >= 1:
 				c.execute("UPDATE inventory SET name=?, {}=? WHERE name=?".format(arg), (person, int(fetchall[1])-1, person))
+				conn.commit()
 				if arg == 'hairdryer':
 					c.execute("SELECT * from items where name=?", (person,))
 					conn.commit()
@@ -637,6 +614,7 @@ def personhandler(person):
 
 def getexp(person, randexp):
 	c.execute("SELECT * from levels WHERE name=?", (person,))
+	conn.commit()
 	fetchlevel = c.fetchall()
 	fetchlevel1 = (fetchlevel[0])[1]
 	fetchlevel2 = (fetchlevel[0])[2]
@@ -648,6 +626,7 @@ def getexp(person, randexp):
 
 def checklevel(person):
 	c.execute("SELECT * from levels WHERE name=?", (person,))
+	conn.commit()
 	fetchlevel = c.fetchall()
 	fetchlevel11 = fetchlevel[0][1]
 	fetchlevel22 = fetchlevel[0][2]
@@ -664,6 +643,7 @@ def checklevel(person):
 
 def houseformat(person):
 	c.execute("SELECT * from house WHERE name=?", (person,))
+	conn.commit()
 	fetchall = c.fetchall()
 	fetchall = fetchall[0]
 

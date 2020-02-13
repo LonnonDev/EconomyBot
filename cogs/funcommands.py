@@ -36,14 +36,29 @@ class fun(commands.Cog, name='Fun Commands'):
 	def __init__(self, bot):
 		self.bot = bot
 
+	async def beta(ctx):
+		# 234834826081992704 222388637541597185 109475170602729472 109496491072077824 164120455228293120 362255701323677713 488929293905428482 600798393459146784
+		return ctx.author.id == 234834826081992704 or ctx.author.id == 222388637541597185 or ctx.author.id == 109475170602729472 or ctx.author.id == 109496491072077824 or ctx.author.id == 164120455228293120 or ctx.author.id == 362255701323677713 or ctx.author.id == 488929293905428482 or ctx.author.id == 600798393459146784
+
 	@commands.command()
-	@commands.cooldown(1, 5, commands.BucketType.user)
 	async def bully(self, ctx, member: discord.Member):
 		randint = random.randint(1,2)
 		if randint == 1:
 			await ctx.send(f"{member} has small pp")
 		elif randint == 2:
 			await ctx.send(f"{member} has small brain")
+
+	@commands.command()
+	@commands.cooldown(1, 60, commands.BucketType.user)
+	@commands.check(beta)
+	async def fishingmeme(self, ctx, laugh : int):
+		await ctx.message.delete()
+		await ctx.send("Fishing I barely know her!")
+		ha = ''
+		for x in range(laugh):
+			await asyncio.sleep(1)
+			ha += "HA"
+			await ctx.send(f"**{ha}**")
 
 	@commands.command()
 	@commands.cooldown(1, 3, commands.BucketType.user)

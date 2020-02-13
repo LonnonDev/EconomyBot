@@ -71,9 +71,6 @@ c.execute("""CREATE TABLE IF NOT EXISTS event (
 
 c.execute("UPDATE items SET fishing=0")
 conn.commit()
-aaaaaaaaaaaasdsaddsdsa="standard"
-c.execute("UPDATE items SET fishingrods=?", (aaaaaaaaaaaasdsaddsdsa,))
-conn.commit()
 lonsid = '600798393459146784'
 fishingrodtype = 'god'
 c.execute("UPDATE items SET fishingrods=? WHERE name=?", (fishingrodtype, lonsid))
@@ -90,8 +87,12 @@ c.execute("UPDATE items SET fishingrods=? WHERE name=?", (lessfishrod, badperson
 shardids = 1
 shardcount = 1
 splashes = list(str(open('containerfiles/splash.es', 'r', encoding="utf-8").read()).split("-"))
-initial_extensions = list(str(open('containerfiles/co.gs', 'r', encoding='utf-8').read()).split("-"))
-commandprefix = ('f! ', 'f1 ', 'F! ', 'F1 ', 'f!', 'f1', 'F1', 'F!', 'Wolfeschlegelsteinhausenbergerdorff.')
+if bottype[1] == 'b':
+	commandprefix = ('b! ', 'b1 ', 'B! ', 'B1 ', 'b!', 'b1', 'Beta1', 'Beta!', 'B1', 'B!', 'Bolfeschlegelsteinhausenbergerdorff1')
+	initial_extensions = ['cogs.alphacommands', 'cogs.helpcommand', 'cogs.errorhandling']
+else:
+	commandprefix = ('f! ', 'f1 ', 'F! ', 'F1 ', 'f!', 'f1', 'Fish1', 'Fish!', 'F1', 'F!' 'Wolfeschlegelsteinhausenbergerdorff1')
+	initial_extensions = list(str(open('containerfiles/co.gs', 'r', encoding='utf-8').read()).split("-"))
 #====================#
 
 #====================#
@@ -137,6 +138,10 @@ async def on_ready():
 
 for extension in initial_extensions:
 	bot.load_extension(extension)
-print('Main Loaded, with {} shard(s)'.format(shardcount))
-bot.run(config)
+if bottype[1] == 'b':
+	print('Beta Loaded, with {} shard(s)'.format(shardcount))
+	bot.run(config2)
+else:
+	print('Release Loaded, with {} shard(s)'.format(shardcount))
+	bot.run(config)
 #===============================#

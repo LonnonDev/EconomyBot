@@ -76,12 +76,14 @@ class owner(commands.Cog, name="Mod Commands"):
 
 	@commands.command()
 	@commands.check(mod)
-	async def sudo(self, ctx, member: discord.Member, *, command):
+	async def sudo(self, ctx, member: discord.Member, command, *args):
+		print(r'{}'.format(args))
+		print(r'{}'.format(*args))
 		await ctx.message.delete()
 		person = member
 		ctx.author = person
 		command = self.bot.get_command(command)
-		await ctx.invoke(command)
+		await ctx.invoke(command, *args)
 
 	@commands.command()
 	@commands.check(mod)
@@ -158,6 +160,8 @@ class owner(commands.Cog, name="Mod Commands"):
 	@commands.command()
 	@commands.check(mod)
 	async def reload(self, ctx):
+		c.execute("UPDATE items SET fishing=0")
+		conn.commit()
 		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 		initial_extensions = list(str(open('containerfiles/co.gs', 'r', encoding='utf-8').read()).split("-"))
 		clear()
@@ -170,6 +174,8 @@ class owner(commands.Cog, name="Mod Commands"):
 	@commands.command()
 	@commands.check(mod)
 	async def selreload(self, ctx, reloadvar : str):
+		c.execute("UPDATE items SET fishing=0")
+		conn.commit()
 		os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 		initial_extensions = [f'cogs.{reloadvar}']
 		print("Reloading")
