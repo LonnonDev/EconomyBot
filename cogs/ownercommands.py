@@ -111,13 +111,13 @@ class owner(commands.Cog, name="Mod Commands"):
 
 	@commands.command()
 	@commands.check(mod)
-	async def set(self, ctx, member: discord.Member, item, amount):
+	async def set(self, ctx, member: discord.Member, item, typeof, amount):
 		person = str(member.id)
-		if item == 'fish':
+		if typeof == 'fish':
 			c.execute('SELECT * from items where name=?', (person,))
 			conn.commit()
 			fetchone = c.fetchone()
-			c.execute("UPDATE items SET fish=? WHERE name=?", (int(amount), person))
+			c.execute("UPDATE items SET {}=? WHERE name=?".format(item), (int(amount), person))
 			conn.commit()
 			await ctx.send(f"Updated {item} for <@!{person}>")
 		else:

@@ -19,7 +19,10 @@ import dbl
 from random_word import RandomWords
 from colorama import init
 from termcolor import colored
+version = open("versi.on", "r", encoding='utf-8')
+version = version.read()
 init()
+
 
 os.chdir('C:/Users/Lemon/Desktop/EconomyBot')
 bottype = list(sys.argv)
@@ -39,9 +42,19 @@ c.execute("""CREATE TABLE IF NOT EXISTS people (
 
 c.execute("""CREATE TABLE IF NOT EXISTS items (
 		name blob,
-		fish real,
-		fishing real
+		cod real,
+		tuna real,
+		salmon real,
+		catfsh real,
+		redsnapper real,
+		raingbowtrout real,
+		trout real,
+		bass real,
+		sardine real,
+		fishing real,
+		fishingrods blob
 		)""")
+
 
 c.execute("""CREATE TABLE IF NOT EXISTS inventory (
 		name blob,
@@ -68,6 +81,27 @@ c.execute("""CREATE TABLE IF NOT EXISTS event (
 	name blob,
 	splashtxt blob
 	)""")
+
+"""c.execute("ALTER TABLE items ADD cod")
+conn.commit()
+c.execute("ALTER TABLE items ADD tuna")
+conn.commit()
+c.execute("ALTER TABLE items ADD salmon")
+conn.commit()
+c.execute("ALTER TABLE items ADD catfish")
+conn.commit()
+c.execute("ALTER TABLE items ADD redsnapper")
+conn.commit()
+c.execute("ALTER TABLE items ADD rainbowtrout")
+conn.commit()
+c.execute("ALTER TABLE items ADD trout")
+conn.commit()
+c.execute("ALTER TABLE items ADD bass")
+conn.commit()
+c.execute("ALTER TABLE items ADD sardine")
+conn.commit()"""
+#c.execute("ALTER TABLE items RENAME COLUMN fish TO cod")
+#conn.commit()
 
 c.execute("UPDATE items SET fishing=0")
 conn.commit()
@@ -127,10 +161,11 @@ logerror.write(f"ErrorLog{rannumber}.log | {ct}\n")
 logerror.close()
 rannum = str(rannumber).zfill(3)
 print(colored('Version {}.{}.{}'.format(str(rannum)[0], str(rannum)[1], str(rannum)[2]), 'magenta'))
-version = 'Version {}.{}.{}'.format(str(rannum)[0], str(rannum)[1], str(rannum)[2])
+ran = rannum
+
 
 splashran1 = random.randint(1-1,len(splashes)-1)
-game=discord.Game(f'{version} | {splashes[splashran1]}') 
+game=discord.Game(f'{version} | {splashes[splashran1]} | Ran {ran} times') 
 
 @bot.event
 async def on_ready():
