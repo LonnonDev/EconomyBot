@@ -21,6 +21,8 @@ and that is all!
 - Sell
     - Sell stuff
 
+## Liability
+I will not hold any liability if this bot breaks your server or ruins it, self-host at your own risk
 
 ## More info
 - [Security](https://github.com/LonnonjamesD/EconomyBot/blob/master/SECURITY.md)
